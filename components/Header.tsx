@@ -6,10 +6,10 @@ import clsx from 'clsx';
 import { motion } from 'framer-motion';
 import { usePathname, useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { signOut, useSession } from 'next-auth/react';
+import { signOut } from 'next-auth/react';
 import { Route } from 'next';
 import Image from 'next/image';
-import { Oval } from 'react-loading-icons';
+import { useUser } from '@/hooks/useUser';
 import { ModalWrapper } from './ModalWrapper';
 import PFP from '../public/pfp.png';
 import caretIcon from '../public/Caret.svg';
@@ -63,15 +63,9 @@ const AccountModal: FC<AccountModalProps> = ({ username, onSelect }) => {
 const AccountSection = () => {
     const [modalOpen, setModalOpen] = useState(false);
 
-    const { data, status } = useSession();
+    const user = useUser();
 
-    if (status === 'loading') {
-        return (
-            <Oval />
-        );
-    }
-
-    if (!data) {
+    if (!user) {
         return (
             <>
                 <NavLink href="/sign-in">Sign In</NavLink>
@@ -91,7 +85,7 @@ const AccountSection = () => {
                 <Image src={caretIcon} alt="caret" />
             </button>
             <ModalWrapper open={modalOpen} onClose={() => setModalOpen(false)}>
-                <AccountModal onSelect={() => setModalOpen(false)} username={data.user.username} />
+                <AccountModal onSelect={() => setModalOpen(false)} username={user.username} />
             </ModalWrapper>
         </div>
     );

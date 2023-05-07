@@ -1,11 +1,12 @@
 'use client';
 
-import { FC, PropsWithChildren } from 'react';
+import { FC, PropsWithChildren, Suspense } from 'react';
 import './index.css';
 import { Header } from '@/components/Header';
 import { trpc } from '@/common/trpc';
 import { SessionProvider } from 'next-auth/react';
 import { Session } from 'next-auth';
+import { Oval } from 'react-loading-icons';
 
 export const metadata = {
     title: 'Create Next App',
@@ -16,8 +17,10 @@ const RootLayout: FC<PropsWithChildren<{ session: Session }>> = ({ children, ses
     <html lang="en">
         <body>
             <SessionProvider session={session}>
-                <Header />
-                {children}
+                <Suspense fallback={<Oval />}>
+                    <Header />
+                    {children}
+                </Suspense>
             </SessionProvider>
         </body>
     </html>
