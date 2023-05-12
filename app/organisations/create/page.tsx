@@ -5,11 +5,11 @@ import { Form, Formik } from 'formik';
 import { Oval } from 'react-loading-icons';
 import { TextField } from '@/components/TextField';
 import { ErrorBox } from '@/components/Notification';
-import { concurrentControledTest } from '@/common/concurrencyControl';
 import { motion } from 'framer-motion';
 import { trpc } from '@/common/trpc';
 import { protectedClientPage } from '@/components/protectedClientPage';
 import { useRouter } from 'next/navigation';
+import { cache } from 'react';
 
 /**
  * Schema for validating the SignUp page fields
@@ -17,7 +17,8 @@ import { useRouter } from 'next/navigation';
 const CreateOrganisationSchema = Yup.object().shape({
     name: Yup
         .string()
-        .test('is-available', 'Name taken', concurrentControledTest(async (value) => !(await trpc.client.organisation.nameTaken.query(value)), false))
+        // TODO: Automatically replace spaces with hyphen as name is typed to ensure name available values are same as stored
+        .test('is-available', 'Name taken', cache(async (value) => !(await trpc.client.organisation.nameTaken.query(value))))
         .required('Required'),
     description: Yup
         .string()

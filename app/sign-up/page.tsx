@@ -4,12 +4,12 @@ import * as Yup from 'yup';
 import { Form, Formik } from 'formik';
 import { Oval } from 'react-loading-icons';
 import { TextField } from '@/components/TextField';
-import { concurrentControledTest } from '@/common/concurrencyControl';
 import { motion } from 'framer-motion';
 import { ErrorBox } from '@/components/Notification';
 import { trpc } from '@/common/trpc';
 import { signIn, useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
+import { cache } from 'react';
 
 /**
  * Schema for validating the SignUp page fields
@@ -18,7 +18,7 @@ const SignUpSchema = Yup.object().shape({
     email: Yup
         .string()
         .matches(/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/, 'Not valid email')
-        .test('is-available', 'Email taken', concurrentControledTest(async (value) => !(await trpc.client.auth.emailTaken.query(value)), false))
+        .test('is-available', 'Email taken', cache(async (value) => !(await trpc.client.auth.emailTaken.query(value))))
         .required('Required'),
     username: Yup
         .string()
@@ -26,7 +26,7 @@ const SignUpSchema = Yup.object().shape({
         .max(15, 'Too long')
         .matches(/^\S+$/, 'Spaces are not permitted')
         // TODO: ensure username is valid url string before sending to prevent 404 errors, or use a post request
-        .test('is-available', 'Username taken', concurrentControledTest(async (value) => !(await trpc.client.auth.usernameTaken.query(value)), false))
+        .test('is-available', 'Username taken', cache(async (value) => !(await trpc.client.auth.usernameTaken.query(value))))
         .required('Required'),
     password: Yup
         .string()
