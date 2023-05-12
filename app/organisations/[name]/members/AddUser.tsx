@@ -45,7 +45,7 @@ const UserCard: FC<UserCardProps> = ({ user, onSelect }) => {
         >
             <div className={clsx(
                 'card grid auto-cols-max gap-x-3 p-2 duration-200',
-                !isLoading && 'group-hover:opacity-50 group-hover:blur-sm',
+                isLoading ? 'opacity-50 blur-sm' : 'group-hover:opacity-50 group-hover:blur-sm',
             )}
             >
                 <Image src={PFP} alt="profile" className="col-span-1 col-start-1 row-span-2 row-start-1 h-14 w-14 rounded-full" />
@@ -56,7 +56,7 @@ const UserCard: FC<UserCardProps> = ({ user, onSelect }) => {
             <div
                 className={clsx(
                     'absolute left-0 top-0 flex h-full w-full items-center justify-center p-2 opacity-0 duration-200',
-                    !isLoading && 'group-hover:opacity-100',
+                    isLoading ? 'opacity-100' : 'group-hover:opacity-100',
                 )}
             >
                 {isLoading ? <Oval /> : <span className="text-lg">Add to Organisation</span>}
