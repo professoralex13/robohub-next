@@ -1,32 +1,15 @@
 'use client';
 
-import { Search } from 'tabler-icons-react';
-import { FC, PropsWithChildren, useState } from 'react';
-import clsx from 'clsx';
 import { motion } from 'framer-motion';
-import { usePathname, useRouter } from 'next/navigation';
-import Link from 'next/link';
+import { User } from 'next-auth';
 import { signOut } from 'next-auth/react';
-import { Route } from 'next';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { FC, useState } from 'react';
 import Image from 'next/image';
-import { useUser } from '@/hooks/useUser';
-import { ModalWrapper } from './ModalWrapper';
-import PFP from '../public/pfp.png';
-import caretIcon from '../public/Caret.svg';
-
-interface LinkProps<T extends string> {
-    href: Route<T>;
-}
-
-const NavLink = <T extends string>({ href: to, children }: PropsWithChildren<LinkProps<T>>) => {
-    const pathname = usePathname();
-
-    const isActive = pathname?.startsWith(to);
-
-    return (
-        <Link href={to} className={clsx('link text-xl', isActive && 'text-navy-300 underline')}>{children}</Link>
-    );
-};
+import PFP from '@/public/pfp.png';
+import caretIcon from '@/public/Caret.svg';
+import { ModalWrapper } from '../ModalWrapper';
 
 interface AccountModalProps {
     username: string;
@@ -60,19 +43,8 @@ const AccountModal: FC<AccountModalProps> = ({ username, onSelect }) => {
     );
 };
 
-const AccountSection = () => {
+export const AccountSection = ({ user }: { user: User }) => {
     const [modalOpen, setModalOpen] = useState(false);
-
-    const user = useUser();
-
-    if (!user) {
-        return (
-            <>
-                <NavLink href="/sign-in">Sign In</NavLink>
-                <NavLink href="/sign-up">Sign Up</NavLink>
-            </>
-        );
-    }
 
     return (
         <div className="relative">
@@ -90,13 +62,3 @@ const AccountSection = () => {
         </div>
     );
 };
-
-export const Header = () => (
-    <header className="fixed top-0 z-10 flex w-screen items-center justify-between gap-16 border-b-4 border-navy-300 p-5">
-        <Link href="/" className="mr-auto text-5xl text-navy-300">robohub</Link>
-        <NavLink href="/blogs">Blogs</NavLink>
-        <NavLink href="/teams">Teams</NavLink>
-        <AccountSection />
-        <Search className="duration-100 hover:stroke-navy-300" />
-    </header>
-);
