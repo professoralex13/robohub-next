@@ -1,6 +1,6 @@
 import * as yup from 'yup';
 import { hash } from 'argon2';
-
+import { prisma } from '@/common/prisma';
 import { publicProcedure, router } from './trpc';
 
 const SignUpSchema = yup.object({
@@ -10,22 +10,22 @@ const SignUpSchema = yup.object({
 });
 
 export const authRouter = router({
-    emailTaken: publicProcedure.input(yup.string()).query(async ({ ctx, input }) => {
-        const user = await ctx.prisma.user.findFirst({ where: { email: input } });
+    emailTaken: publicProcedure.input(yup.string()).query(async ({ input }) => {
+        const user = await prisma.user.findFirst({ where: { email: input } });
 
         return !!user;
     }),
-    usernameTaken: publicProcedure.input(yup.string()).query(async ({ ctx, input }) => {
-        const user = await ctx.prisma.user.findFirst({ where: { username: input } });
+    usernameTaken: publicProcedure.input(yup.string()).query(async ({ input }) => {
+        const user = await prisma.user.findFirst({ where: { username: input } });
 
         return !!user;
     }),
-    signUp: publicProcedure.input(SignUpSchema).mutation(async ({ ctx, input }) => {
+    signUp: publicProcedure.input(SignUpSchema).mutation(async ({ input }) => {
         const { email, username, password } = input;
 
         const passwordHash = await hash(password);
 
-        const user = await ctx.prisma.user.create({
+        const user = await prisma.user.create({
             data: {
                 email,
                 username,

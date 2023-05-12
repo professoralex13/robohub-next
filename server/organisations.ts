@@ -1,7 +1,9 @@
 import * as yup from 'yup';
 
-import { TRPCError } from '@trpc/server';
+import { MembershipType } from '@/common';
+import { prisma } from '@/common/prisma';
 import { publicProcedure, router } from './trpc';
+import { getAuthenticatedUser, getOrganisation, getUser } from './utils';
 
 const CreateOrganisationSchema = yup.object().shape({
     name: yup.string().required('Required'),
@@ -10,23 +12,16 @@ const CreateOrganisationSchema = yup.object().shape({
 });
 
 export const organisationRouter = router({
-    nameTaken: publicProcedure.input(yup.string()).query(async ({ ctx, input }) => {
-        const organisation = await ctx.prisma.organisation.findFirst({ where: { name: input } });
+    nameTaken: publicProcedure.input(yup.string()).query(async ({ input }) => {
+        const organisation = await prisma.organisation.findFirst({ where: { name: input } });
 
         return !!organisation;
     }),
 
     create: publicProcedure.input(CreateOrganisationSchema).mutation(async ({ ctx, input }) => {
-        const user = ctx.session?.user;
+        const user = getAuthenticatedUser(ctx);
 
-        if (!user) {
-            throw new TRPCError({
-                code: 'FORBIDDEN',
-                message: 'You must be signed in to create an organisation',
-            });
-        }
-
-        const organisation = await ctx.prisma.organisation.create({
+        const organisation = await prisma.organisation.create({
             data: {
                 // Replace spaces with dashes to prevent URL issues
                 name: input.name.replaceAll(' ', '-'),
@@ -42,5 +37,44 @@ export const organisationRouter = router({
         });
 
         return organisation;
+    }),
+
+    addUser: publicProcedure.input(yup.object().shape({
+        organisationName: yup.string().required(),
+        username: yup.string().required(),
+    })).mutation(async ({ ctx, input }) => {
+        const { organisationName, username } = input;
+
+        const organisation = await getOrganisation(ctx, organisationName, MembershipType.Admin);
+
+        const user = await getUser(username);
+
+        await prisma.organisationUser.create({
+            data: {
+                isAdmin: false,
+                userId: user.id,
+                organisationId: organisation.id,
+            },
+        });
+    }),
+
+    removeUser: publicProcedure.input(yup.object().shape({
+        organisationName: yup.string().required(),
+        username: yup.string().required(),
+    })).mutation(async ({ ctx, input }) => {
+        const { organisationName, username } = input;
+
+        const organisation = await getOrganisation(ctx, organisationName, MembershipType.Admin);
+
+        const user = await getUser(username);
+
+        await prisma.organisationUser.delete({
+            where: {
+                userId_organisationId: {
+                    userId: user.id,
+                    organisationId: organisation.id,
+                },
+            },
+        });
     }),
 });

@@ -1,6 +1,5 @@
 import { inferAsyncReturnType } from '@trpc/server';
 import { CreateNextContextOptions } from '@trpc/server/adapters/next';
-import { prisma } from '@/common/prisma';
 import { getServerSession } from 'next-auth';
 import { nextAuthOptions } from '@/common/auth';
 
@@ -12,7 +11,6 @@ export async function createContext(ctx: CreateNextContextOptions) {
     return {
         req,
         res,
-        prisma,
         session,
     };
 }
