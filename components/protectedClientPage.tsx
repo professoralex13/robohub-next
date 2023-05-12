@@ -3,9 +3,8 @@
 import { User } from 'next-auth';
 import { useSession } from 'next-auth/react';
 import { redirect } from 'next/navigation';
-import { ReactNode } from 'react';
 
-export function protectedClientPage<P extends {}>(Component: (props: P & { user: User }) => ReactNode) {
+export function protectedClientPage<P extends {}>(Component: (props: P & { user: User }) => JSX.Element) {
     return (props: P) => {
         const { data } = useSession();
 
