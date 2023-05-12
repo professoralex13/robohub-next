@@ -7,6 +7,7 @@ import { trpc } from '@/common/trpc';
 import { Oval } from 'react-loading-icons';
 import { Trash } from 'tabler-icons-react';
 import { useRouter } from 'next/navigation';
+import { useConfirmation } from '@/app/contexts/ConfirmationContext';
 import { useOrganisation } from '../OrganisationContext';
 
 interface MemberRowProps {
@@ -26,6 +27,8 @@ export const MemberRow = protectedClientPage<MemberRowProps>(({ member, user: lo
 
     const router = useRouter();
 
+    const confirm = useConfirmation();
+
     return (
         <div
             className="grid grid-cols-[max-content_auto_max-content_5%] gap-3 overflow-hidden p-3"
@@ -37,9 +40,14 @@ export const MemberRow = protectedClientPage<MemberRowProps>(({ member, user: lo
                 <Trash
                     className="my-auto ml-auto cursor-pointer stroke-slate-400 duration-200 hover:stroke-red-500"
                     onClick={async () => {
-                        await mutateAsync({ organisationName: organisation.name, username: user.username });
+                        if (await confirm(<span>Remove <strong>{user.username}</strong> from <strong>{organisation.name}</strong></span>)) {
+                            await mutateAsync({
+                                organisationName: organisation.name,
+                                username: user.username,
+                            });
 
-                        router.refresh();
+                            router.refresh();
+                        }
                     }}
                 />
             ))}

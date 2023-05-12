@@ -9,6 +9,7 @@ import { FC, useState } from 'react';
 import { Oval } from 'react-loading-icons';
 import PFP from '@/public/pfp.png';
 import Image from 'next/image';
+import { useConfirmation } from '@/app/contexts/ConfirmationContext';
 import { useOrganisation } from '../OrganisationContext';
 
 interface UserCardProps {
@@ -23,15 +24,22 @@ const UserCard: FC<UserCardProps> = ({ user, onSelect }) => {
 
     const router = useRouter();
 
+    const confirm = useConfirmation();
+
     return (
         <button
             className="group relative h-max w-full cursor-pointer"
             onClick={!isLoading ? (async () => {
-                await mutateAsync({ organisationName: organisation.name, username: user.username });
+                if (await confirm(<span>Add <strong>{user.username}</strong> to <strong>{organisation.name}</strong></span>)) {
+                    await mutateAsync({
+                        organisationName: organisation.name,
+                        username: user.username,
+                    });
 
-                router.refresh();
+                    router.refresh();
 
-                onSelect();
+                    onSelect();
+                }
             }) : undefined}
             type="button"
         >

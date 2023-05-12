@@ -4,6 +4,8 @@ import { trpc } from '@/common/trpc';
 import { Session } from 'next-auth';
 import { SessionProvider } from 'next-auth/react';
 import { FC, PropsWithChildren } from 'react';
+import { DialogContextProvider } from '@/app/contexts/DialogContext';
+import { ConfirmationContextProvider } from '@/app/contexts/ConfirmationContext';
 
 interface ProvidersProps {
     session: Session;
@@ -11,7 +13,11 @@ interface ProvidersProps {
 
 const Providers: FC<PropsWithChildren<ProvidersProps>> = ({ session, children }) => (
     <SessionProvider session={session}>
-        {children}
+        <DialogContextProvider>
+            <ConfirmationContextProvider>
+                {children}
+            </ConfirmationContextProvider>
+        </DialogContextProvider>
     </SessionProvider>
 );
 
