@@ -3,6 +3,7 @@ import './index.css';
 import { Header } from '@/components/Header';
 import { Session } from 'next-auth';
 import Providers from '@/components/Providers';
+import { Analytics } from '@vercel/analytics/react';
 
 const RootLayout: FC<PropsWithChildren<{ session: Session }>> = ({ session, children }) => (
     <html lang="en">
@@ -10,6 +11,7 @@ const RootLayout: FC<PropsWithChildren<{ session: Session }>> = ({ session, chil
             <Providers session={session}>
                 <Header />
                 {children}
+                <Analytics />
             </Providers>
         </body>
     </html>
