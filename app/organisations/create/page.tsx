@@ -49,8 +49,9 @@ const CreateOrganisation = protectedClientPage(() => {
                             name,
                             description,
                             location,
-                        }).then(() => {
-                            router.push(`/organisations/${name}`);
+                        }).then((organisation) => {
+                            // Push returned organisation name incase of character replacements
+                            router.push(`/organisations/${organisation.name}`);
                         });
                     }}
                     validationSchema={CreateOrganisationSchema}

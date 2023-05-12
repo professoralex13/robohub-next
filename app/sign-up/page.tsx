@@ -24,6 +24,7 @@ const SignUpSchema = Yup.object().shape({
         .string()
         .min(2, 'Too short')
         .max(15, 'Too long')
+        .matches(/^\S+$/, 'Spaces are not permitted')
         // TODO: ensure username is valid url string before sending to prevent 404 errors, or use a post request
         .test('is-available', 'Username taken', concurrentControledTest(async (value) => !(await trpc.client.auth.usernameTaken.query(value)), false))
         .required('Required'),

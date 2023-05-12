@@ -28,7 +28,8 @@ export const organisationRouter = router({
 
         const organisation = await ctx.prisma.organisation.create({
             data: {
-                name: input.name,
+                // Replace spaces with dashes to prevent URL issues
+                name: input.name.replaceAll(' ', '-'),
                 description: input.description,
                 location: input.location,
                 users: {
