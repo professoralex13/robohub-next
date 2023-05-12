@@ -32,7 +32,13 @@ export const ModalWrapper: FC<PropsWithChildren<ModalWrapperProps>> = ({ open, o
 
     return (
         // Prevents clicking inside the modal from closing it
-        <div onClick={(e) => e.stopPropagation()}>
+        <div onClick={(e) => {
+            e.stopPropagation();
+
+            // Next js needs this for some reason
+            e.nativeEvent.stopImmediatePropagation();
+        }}
+        >
             <AnimatePresence>
                 {open && children}
             </AnimatePresence>
