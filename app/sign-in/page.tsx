@@ -34,10 +34,9 @@ const SignIn = () => {
                 <Formik
                     initialValues={{ emailUsername: '', password: '' }}
                     onSubmit={async ({ emailUsername, password }, { setStatus }) => {
-                        signIn('credentials', { redirect: false, emailUsername, password }).then((value) => {
-                            // Page will be redirected because this page cannot be viewed while logged in before the status is seen
-                            setStatus(value?.error);
-                        });
+                        const value = await signIn('credentials', { redirect: false, emailUsername, password });
+                        // Page will be redirected because this page cannot be viewed while logged in before the status is seen
+                        setStatus(value?.error);
                     }}
                     validationSchema={SignInSchema}
                 >

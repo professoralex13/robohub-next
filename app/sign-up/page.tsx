@@ -62,14 +62,15 @@ const SignUp = () => {
                 <Formik
                     initialValues={{ email: '', username: '', password: '', confirmPassword: '' }}
                     onSubmit={async ({ email, username, password }) => {
-                        mutateAsync({
+                        await mutateAsync({
                             email,
                             username,
                             password,
-                        }).then(() => {
-                            router.push('/');
-                            signIn('credentials', { emailUsername: email, password });
                         });
+
+                        router.push('/');
+
+                        await signIn('credentials', { emailUsername: email, password });
                     }}
                     validationSchema={SignUpSchema}
                 >
