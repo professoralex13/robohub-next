@@ -2,12 +2,7 @@ import { prisma } from '@/common/prisma';
 import { verify } from 'argon2';
 import { NextAuthOptions } from 'next-auth';
 import Credentials from 'next-auth/providers/credentials';
-import * as yup from 'yup';
-
-export const LoginSchema = yup.object().shape({
-    emailUsername: yup.string().required('Required'),
-    password: yup.string().required('Required'),
-});
+import { SignInSchema } from './schema';
 
 export const nextAuthOptions: NextAuthOptions = {
     providers: [
@@ -20,7 +15,7 @@ export const nextAuthOptions: NextAuthOptions = {
             type: 'credentials',
 
             authorize: async (input) => {
-                const credentials = await LoginSchema.validate(input);
+                const credentials = await SignInSchema.validate(input);
 
                 const user = await prisma.user.findFirst({
                     where: { OR: [{ email: credentials.emailUsername }, { username: credentials.emailUsername }] },

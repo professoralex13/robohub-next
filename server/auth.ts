@@ -1,13 +1,8 @@
 import * as yup from 'yup';
 import { hash } from 'argon2';
 import { prisma } from '@/common/prisma';
+import { SignUpSchema } from '@/common/schema';
 import { publicProcedure, router } from './trpc';
-
-const SignUpSchema = yup.object({
-    email: yup.string().required(),
-    username: yup.string().required(),
-    password: yup.string().required(),
-});
 
 export const authRouter = router({
     emailTaken: publicProcedure.input(yup.string()).query(async ({ input }) => {

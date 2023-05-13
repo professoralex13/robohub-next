@@ -1,6 +1,5 @@
 'use client';
 
-import * as Yup from 'yup';
 import { Form, Formik } from 'formik';
 import { Oval } from 'react-loading-icons';
 import { TextField } from '@/components/TextField';
@@ -9,31 +8,7 @@ import { ErrorBox } from '@/components/Notification';
 import { trpc } from '@/common/trpc';
 import { signIn, useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
-
-/**
- * Schema for validating the SignUp page fields
- */
-const SignUpSchema = Yup.object().shape({
-    email: Yup
-        .string()
-        .matches(/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/, 'Not valid email')
-        .required('Required'),
-    username: Yup
-        .string()
-        .min(2, 'Too short')
-        .max(15, 'Too long')
-        .required('Required'),
-    password: Yup
-        .string()
-        .min(2, 'Too short')
-        .max(15, 'Too long')
-        .required('Required'),
-    confirmPassword: Yup
-        .string()
-        // Yup.ref(...) returns the value of another field in the object
-        .oneOf([Yup.ref('password'), ''], 'Passwords must match')
-        .required('Required'),
-});
+import { SignUpSchema } from '@/common/schema';
 
 const SignUp = () => {
     const { data } = useSession();
@@ -56,7 +31,7 @@ const SignUp = () => {
                 <span className="text-6xl">Sign Up for <span className="text-navy-300">robohub</span></span>
                 <Formik
                     initialValues={{ email: '', username: '', password: '', confirmPassword: '' }}
-                    onSubmit={async ({ email, username, password }, { setFieldError }) => {
+                    onSubmit={async ({ email, username, password, confirmPassword }, { setFieldError }) => {
                         const [usernameTaken, emailTaken] = await Promise.all([
                             trpc.client.auth.usernameTaken.query(username),
                             trpc.client.auth.emailTaken.query(email),
@@ -78,6 +53,7 @@ const SignUp = () => {
                             email,
                             username,
                             password,
+                            confirmPassword,
                         });
 
                         router.push('/');

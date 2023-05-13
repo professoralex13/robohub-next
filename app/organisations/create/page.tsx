@@ -1,6 +1,5 @@
 'use client';
 
-import * as Yup from 'yup';
 import { Form, Formik } from 'formik';
 import { Oval } from 'react-loading-icons';
 import { TextField } from '@/components/TextField';
@@ -9,23 +8,11 @@ import { motion } from 'framer-motion';
 import { trpc } from '@/common/trpc';
 import { protectedClientPage } from '@/components/protectedClientPage';
 import { useRouter } from 'next/navigation';
+import { CreateOrganisationSchema } from '@/common/schema';
 
 /**
  * Schema for validating the SignUp page fields
  */
-const CreateOrganisationSchema = Yup.object().shape({
-    name: Yup
-        .string()
-        .required('Required'),
-    description: Yup
-        .string()
-        .min(10, 'Too short')
-        .required('Required'),
-    location: Yup
-        .string()
-        .min(2, 'Too short')
-        .required('Required'),
-});
 
 const CreateOrganisation = protectedClientPage(() => {
     const router = useRouter();

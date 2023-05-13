@@ -1,6 +1,5 @@
 'use client';
 
-import * as Yup from 'yup';
 import { Form, Formik } from 'formik';
 import { Oval } from 'react-loading-icons';
 import { TextField } from '@/components/TextField';
@@ -8,11 +7,7 @@ import { motion } from 'framer-motion';
 import { ErrorBox } from '@/components/Notification';
 import { signIn, useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
-
-const SignInSchema = Yup.object().shape({
-    emailUsername: Yup.string().required('Required'),
-    password: Yup.string().required('Required'),
-});
+import { SignInSchema } from '@/common/schema';
 
 const SignIn = () => {
     const { data } = useSession();
