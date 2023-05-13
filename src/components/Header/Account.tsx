@@ -7,8 +7,8 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { FC, useState } from 'react';
 import Image from 'next/image';
-import PFP from '@/public/pfp.png';
-import caretIcon from '@/public/Caret.svg';
+import PFP from '@public/pfp.png';
+import caretIcon from '@public/Caret.svg';
 import { ModalWrapper } from '../ModalWrapper';
 
 interface AccountModalProps {
