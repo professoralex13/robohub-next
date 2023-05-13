@@ -22,7 +22,6 @@ const SignUpSchema = Yup.object().shape({
         .string()
         .min(2, 'Too short')
         .max(15, 'Too long')
-        .matches(/^\S+$/, 'Spaces are not permitted')
         .required('Required'),
     password: Yup
         .string()
@@ -90,7 +89,7 @@ const SignUp = () => {
                     {({ submitForm, isSubmitting, status }) => (
                         <Form className="card flex flex-col items-center justify-around gap-5 p-10">
                             <TextField name="email" placeholder="Email" />
-                            <TextField name="username" placeholder="Username" />
+                            <TextField name="username" placeholder="Username" disallowSpaces />
                             <TextField name="password" placeholder="Password" type="password" />
                             <TextField name="confirmPassword" placeholder="Confirm Password" type="password" />
 

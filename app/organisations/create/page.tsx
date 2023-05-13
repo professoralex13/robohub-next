@@ -62,7 +62,7 @@ const CreateOrganisation = protectedClientPage(() => {
                 >
                     {({ submitForm, isSubmitting, status }) => (
                         <Form className="card flex flex-col items-center justify-around gap-5 p-10">
-                            <TextField name="name" placeholder="Name" />
+                            <TextField name="name" placeholder="Name" disallowSpaces />
                             <TextField name="description" placeholder="Description" />
                             <TextField name="location" placeholder="Location" />
 
