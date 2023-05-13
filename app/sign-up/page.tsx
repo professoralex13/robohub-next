@@ -9,7 +9,6 @@ import { ErrorBox } from '@/components/Notification';
 import { trpc } from '@/common/trpc';
 import { signIn, useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
-import { cache } from 'react';
 
 /**
  * Schema for validating the SignUp page fields
@@ -18,15 +17,12 @@ const SignUpSchema = Yup.object().shape({
     email: Yup
         .string()
         .matches(/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/, 'Not valid email')
-        .test('is-available', 'Email taken', cache(async (value) => !(await trpc.client.auth.emailTaken.query(value))))
         .required('Required'),
     username: Yup
         .string()
         .min(2, 'Too short')
         .max(15, 'Too long')
         .matches(/^\S+$/, 'Spaces are not permitted')
-        // TODO: ensure username is valid url string before sending to prevent 404 errors, or use a post request
-        .test('is-available', 'Username taken', cache(async (value) => !(await trpc.client.auth.usernameTaken.query(value))))
         .required('Required'),
     password: Yup
         .string()
@@ -61,7 +57,24 @@ const SignUp = () => {
                 <span className="text-6xl">Sign Up for <span className="text-navy-300">robohub</span></span>
                 <Formik
                     initialValues={{ email: '', username: '', password: '', confirmPassword: '' }}
-                    onSubmit={async ({ email, username, password }) => {
+                    onSubmit={async ({ email, username, password }, { setFieldError }) => {
+                        const [usernameTaken, emailTaken] = await Promise.all([
+                            trpc.client.auth.usernameTaken.query(username),
+                            trpc.client.auth.emailTaken.query(email),
+                        ]);
+
+                        if (emailTaken) {
+                            setFieldError('email', 'Email Taken');
+                        }
+
+                        if (usernameTaken) {
+                            setFieldError('username', 'Username Taken');
+                        }
+
+                        if (emailTaken || usernameTaken) {
+                            return;
+                        }
+
                         await mutateAsync({
                             email,
                             username,

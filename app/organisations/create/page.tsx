@@ -9,7 +9,6 @@ import { motion } from 'framer-motion';
 import { trpc } from '@/common/trpc';
 import { protectedClientPage } from '@/components/protectedClientPage';
 import { useRouter } from 'next/navigation';
-import { cache } from 'react';
 
 /**
  * Schema for validating the SignUp page fields
@@ -17,8 +16,6 @@ import { cache } from 'react';
 const CreateOrganisationSchema = Yup.object().shape({
     name: Yup
         .string()
-        // TODO: Automatically replace spaces with hyphen as name is typed to ensure name available values are same as stored
-        .test('is-available', 'Name taken', cache(async (value) => !(await trpc.client.organisation.nameTaken.query(value))))
         .required('Required'),
     description: Yup
         .string()
@@ -45,15 +42,21 @@ const CreateOrganisation = protectedClientPage(() => {
                 <span className="text-6xl">Create Organisation</span>
                 <Formik
                     initialValues={{ name: '', description: '', location: '' }}
-                    onSubmit={async ({ name, description, location }) => {
-                        mutateAsync({
+                    onSubmit={async ({ name, description, location }, { setFieldError }) => {
+                        const nameTaken = await trpc.client.organisation.nameTaken.query(name);
+
+                        if (nameTaken) {
+                            setFieldError('name', 'Name Taken');
+                            return;
+                        }
+
+                        const organisation = await mutateAsync({
                             name,
                             description,
                             location,
-                        }).then((organisation) => {
-                            // Push returned organisation name incase of character replacements
-                            router.push(`/organisations/${organisation.name}`);
                         });
+
+                        router.push(`/organisations/${organisation.name}`);
                     }}
                     validationSchema={CreateOrganisationSchema}
                 >
