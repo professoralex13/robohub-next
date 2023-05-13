@@ -36,9 +36,10 @@ const UserCard: FC<UserCardProps> = ({ user, onSelect }) => {
                         username: user.username,
                     });
 
-                    router.refresh();
-
+                    // Close Dialog before refreshing page to ensure user list query is immediately cleared
                     onSelect();
+
+                    router.refresh();
                 }
             }) : undefined}
             type="button"
@@ -70,7 +71,8 @@ const AddUserModal: FC<{ onClose: () => void }> = ({ onClose }) => {
 
     const organisation = useOrganisation();
 
-    const { data } = trpc.react.users.query.useQuery({ query, take: 10, ignoredOrganisation: organisation.name });
+    // Disable member list cache to ensure previously added users dont reappear
+    const { data } = trpc.react.users.query.useQuery({ query, take: 10, ignoredOrganisation: organisation.name }, { cacheTime: 0 });
 
     return (
         <motion.div
@@ -82,7 +84,7 @@ const AddUserModal: FC<{ onClose: () => void }> = ({ onClose }) => {
             <input type="text" placeholder="email/username/full name" value={query} onChange={(e) => setQuery(e.target.value)} />
 
             {/* List must be hidden when length zero so space-y-3 does not create empty space */}
-            <div className={clsx('flex max-h-[50vh] flex-col items-center gap-3 overflow-y-auto', data?.length === 0 && 'hidden')}>
+            <div className={clsx('flex max-h-[50vh] flex-col items-center gap-3 overflow-y-auto', (data?.length === 0 || query === '') && 'hidden')}>
                 {data === undefined ? <Oval /> : data.map((user) => (
                     <UserCard key={user.username} user={user} onSelect={onClose} />
                 ))}
