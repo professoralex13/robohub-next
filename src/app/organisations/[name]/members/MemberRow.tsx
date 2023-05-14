@@ -21,7 +21,7 @@ export const MemberRow = protectedClientPage<MemberRowProps>(({ member, user: lo
 
     const organisation = useOrganisation();
 
-    const showRemoveButton = organisation.membershipType >= MembershipType.Admin && user.username !== loggedInUser.username;
+    const showRemoveButton = organisation.membershipType >= MembershipType.Admin && user.id !== loggedInUser.id;
 
     const { mutateAsync, isLoading } = trpc.react.organisation.removeUser.useMutation();
 
@@ -34,16 +34,16 @@ export const MemberRow = protectedClientPage<MemberRowProps>(({ member, user: lo
             className="grid grid-cols-[max-content_auto_max-content_5%] gap-3 overflow-hidden p-3"
         >
             <input type="checkbox" className="m-auto" />
-            <span className="text-xl text-slate-400">{user.username}</span>
+            <span className="text-xl text-slate-400">{user.name}</span>
             {isAdmin && <span className="text-xl text-slate-400">Admin</span>}
             {showRemoveButton && (isLoading ? <Oval className="my-auto ml-auto h-7" /> : (
                 <Trash
                     className="my-auto ml-auto cursor-pointer stroke-slate-400 duration-200 hover:stroke-red-500"
                     onClick={async () => {
-                        if (await confirm(<span>Remove <strong>{user.username}</strong> from <strong>{organisation.name}</strong></span>)) {
+                        if (await confirm(<span>Remove <strong>{user.name}</strong> from <strong>{organisation.name}</strong></span>)) {
                             await mutateAsync({
                                 organisationName: organisation.name,
-                                username: user.username,
+                                id: user.id,
                             });
 
                             router.refresh();

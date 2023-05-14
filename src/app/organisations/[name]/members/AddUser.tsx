@@ -7,7 +7,7 @@ import { motion } from 'framer-motion';
 import { useRouter } from 'next/navigation';
 import { FC, useState } from 'react';
 import { Oval } from 'react-loading-icons';
-import PFP from '@/public/pfp.png';
+import PFP from '@public/pfp.png';
 import Image from 'next/image';
 import { useConfirmation } from '@/app/contexts/ConfirmationContext';
 import { useOrganisation } from '../OrganisationContext';
@@ -30,10 +30,10 @@ const UserCard: FC<UserCardProps> = ({ user, onSelect }) => {
         <button
             className="group relative h-max w-full cursor-pointer"
             onClick={!isLoading ? (async () => {
-                if (await confirm(<span>Add <strong>{user.username}</strong> to <strong>{organisation.name}</strong></span>)) {
+                if (await confirm(<span>Add <strong>{user.name}</strong> to <strong>{organisation.name}</strong></span>)) {
                     await mutateAsync({
                         organisationName: organisation.name,
-                        username: user.username,
+                        id: user.id,
                     });
 
                     // Close Dialog before refreshing page to ensure user list query is immediately cleared
@@ -50,7 +50,7 @@ const UserCard: FC<UserCardProps> = ({ user, onSelect }) => {
             )}
             >
                 <Image src={PFP} alt="profile" className="col-span-1 col-start-1 row-span-2 row-start-1 h-14 w-14 rounded-full" />
-                <span className="col-start-2 row-start-1 text-start text-xl">{user.username}</span>
+                <span className="col-start-2 row-start-1 text-start text-xl">{user.name}</span>
                 <span className="col-start-2 row-start-2 text-start text-lg text-slate-300">{user.email}</span>
             </div>
 
@@ -86,7 +86,7 @@ const AddUserModal: FC<{ onClose: () => void }> = ({ onClose }) => {
             {/* List must be hidden when length zero so space-y-3 does not create empty space */}
             <div className={clsx('flex max-h-[50vh] flex-col items-center gap-3 overflow-y-auto', (data?.length === 0 || query === '') && 'hidden')}>
                 {data === undefined ? <Oval /> : data.map((user) => (
-                    <UserCard key={user.username} user={user} onSelect={onClose} />
+                    <UserCard key={user.id} user={user} onSelect={onClose} />
                 ))}
             </div>
         </motion.div>

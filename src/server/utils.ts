@@ -16,17 +16,17 @@ export function getAuthenticatedUser(ctx: Context) {
     return user;
 }
 
-export async function getUser(username: string) {
+export async function getUser(id: string) {
     const user = await prisma.user.findUnique({
         where: {
-            username,
+            id,
         },
     });
 
     if (!user) {
         throw new TRPCError({
             code: 'FORBIDDEN',
-            message: `No user could be found with the username: ${username}`,
+            message: `No user could be found with the id: ${id}`,
         });
     }
 

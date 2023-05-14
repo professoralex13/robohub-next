@@ -8,7 +8,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { FC, PropsWithChildren } from 'react';
 import { Dashboard, Icon, List, Notes, Settings, User, Users } from 'tabler-icons-react';
-import teamLogo from '@/public/TeamLogo.png';
+import teamLogo from '@public/TeamLogo.png';
 
 interface HeaderLinkProps<T extends string> extends PropsWithChildren {
     symbol: Icon;

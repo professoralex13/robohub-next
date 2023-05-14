@@ -6,7 +6,7 @@ import { publicProcedure, router } from './trpc';
 import { getAuthenticatedUser, getOrganisation, getUser } from './utils';
 
 export const organisationRouter = router({
-    nameTaken: publicProcedure.input(yup.string()).query(async ({ input }) => {
+    nameTaken: publicProcedure.input(yup.string().required()).query(async ({ input }) => {
         const organisation = await prisma.organisation.findFirst({ where: { name: input } });
 
         return !!organisation;
@@ -32,13 +32,13 @@ export const organisationRouter = router({
 
     addUser: publicProcedure.input(yup.object().shape({
         organisationName: yup.string().required(),
-        username: yup.string().required(),
+        id: yup.string().required(),
     })).mutation(async ({ ctx, input }) => {
-        const { organisationName, username } = input;
+        const { organisationName, id } = input;
 
         const organisation = await getOrganisation(ctx, organisationName, MembershipType.Admin);
 
-        const user = await getUser(username);
+        const user = await getUser(id);
 
         await prisma.organisationUser.create({
             data: {
@@ -51,13 +51,13 @@ export const organisationRouter = router({
 
     removeUser: publicProcedure.input(yup.object().shape({
         organisationName: yup.string().required(),
-        username: yup.string().required(),
+        id: yup.string().required(),
     })).mutation(async ({ ctx, input }) => {
-        const { organisationName, username } = input;
+        const { organisationName, id } = input;
 
         const organisation = await getOrganisation(ctx, organisationName, MembershipType.Admin);
 
-        const user = await getUser(username);
+        const user = await getUser(id);
 
         await prisma.organisationUser.delete({
             where: {

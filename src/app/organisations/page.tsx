@@ -4,7 +4,7 @@ import { prisma } from '@/common/prisma';
 import Link from 'next/link';
 import { protectedServerPage } from '@/components/protectedServerPage';
 
-export const OrganisationList = protectedServerPage(async ({ user }) => {
+const OrganisationList = protectedServerPage(async ({ user }) => {
     const organisations = await prisma.organisation.findMany({
         where: {
             users: {

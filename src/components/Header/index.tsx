@@ -18,7 +18,6 @@ export const Header = async () => {
             {session ? <AccountSection user={session.user} /> : (
                 <>
                     <NavLink href="/sign-in">Sign In</NavLink>
-                    <NavLink href="/sign-up">Sign Up</NavLink>
                 </>
             )}
             <Search className="duration-100 hover:stroke-navy-300" />

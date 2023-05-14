@@ -17,7 +17,7 @@ const MembersList = async ({ params }: OrganisationPageProps) => {
                 <span className="text-slate-300">Members</span>
             </div>
             {members.map((member) => (
-                <MemberRow key={member.user.username} member={member} />
+                <MemberRow key={member.user.email} member={member} />
             ))}
         </div>
     );

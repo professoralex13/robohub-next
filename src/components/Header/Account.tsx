@@ -12,11 +12,11 @@ import caretIcon from '@public/Caret.svg';
 import { ModalWrapper } from '../ModalWrapper';
 
 interface AccountModalProps {
-    username: string;
+    name: string;
     onSelect: () => void;
 }
 
-const AccountModal: FC<AccountModalProps> = ({ username, onSelect }) => {
+const AccountModal: FC<AccountModalProps> = ({ name, onSelect }) => {
     const router = useRouter();
 
     return (
@@ -26,7 +26,7 @@ const AccountModal: FC<AccountModalProps> = ({ username, onSelect }) => {
             animate={{ clipPath: 'inset(0)' }}
             exit={{ clipPath: 'inset(0 0 100% 0)' }}
         >
-            <span className="border-b-2 border-slate-700 px-4 py-2 text-lg">Username: <br /><strong>{username}</strong></span>
+            <span className="border-b-2 border-slate-700 px-4 py-2 text-lg">Name: <br /><strong>{name}</strong></span>
             <div className="flex flex-col" onClick={onSelect}>
                 <Link href="/organisations" className="modal-item" onClick={onSelect}>
                     Your organisations
@@ -57,7 +57,7 @@ export const AccountSection = ({ user }: { user: User }) => {
                 <Image src={caretIcon} alt="caret" />
             </button>
             <ModalWrapper open={modalOpen} onClose={() => setModalOpen(false)}>
-                <AccountModal onSelect={() => setModalOpen(false)} username={user.username} />
+                <AccountModal onSelect={() => setModalOpen(false)} name={user.name} />
             </ModalWrapper>
         </div>
     );
