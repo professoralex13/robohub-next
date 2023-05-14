@@ -3,6 +3,7 @@ import { CreateNextContextOptions } from '@trpc/server/adapters/next';
 import { getServerSession } from 'next-auth';
 import { nextAuthOptions } from '@/common/auth';
 import { Storage } from '@google-cloud/storage';
+import { env } from '@/common/environment';
 
 export async function createContext(ctx: CreateNextContextOptions) {
     const { req, res } = ctx;
@@ -10,10 +11,10 @@ export async function createContext(ctx: CreateNextContextOptions) {
     const session = await getServerSession(req, res, nextAuthOptions);
 
     const storage = new Storage({
-        projectId: process.env.GCLOUD_PROJECT_ID,
+        projectId: env.GCLOUD_PROJECT_ID,
         credentials: {
-            client_email: process.env.GCLOUD_CLIENT_EMAIL,
-            private_key: process.env.GCLOUD_PRIVATE_KEY,
+            client_email: env.GCLOUD_CLIENT_EMAIL,
+            private_key: env.GCLOUD_PRIVATE_KEY.split(String.raw`\n`).join('\n'), // Replacement is needed for scenarios where env vars are provided as raw data
         },
     });
 

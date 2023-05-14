@@ -9,6 +9,10 @@ const EnvironmentSchema = yup.object().shape({
     DISCORD_CLIENT_SECRET: yup.string().required(),
     GITHUB_CLIENT_ID: yup.string().required(),
     GITHUB_CLIENT_SECRET: yup.string().required(),
+
+    GCLOUD_PROJECT_ID: yup.string().required(),
+    GCLOUD_CLIENT_EMAIL: yup.string().required(),
+    GCLOUD_PRIVATE_KEY: yup.string().required(),
 });
 
 export const env = EnvironmentSchema.validateSync(ENV);
