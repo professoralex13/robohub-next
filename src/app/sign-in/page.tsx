@@ -3,8 +3,16 @@
 import { motion } from 'framer-motion';
 import { signIn, useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
+import { ErrorBox } from '@/components/Notification';
+import { FC } from 'react';
 
-const SignIn = () => {
+interface SignInPageProps {
+    searchParams: {
+        error?: 'OAuthAccountNotLinked' | 'OAuthSignin' | 'OAuthCallback';
+    };
+}
+
+const SignIn: FC<SignInPageProps> = ({ searchParams }) => {
     const { data } = useSession();
     const router = useRouter();
 
@@ -21,6 +29,10 @@ const SignIn = () => {
                 animate={{ opacity: 1, y: 0 }}
             >
                 <button className="button" type="button" onClick={() => signIn('google')}>Sign in with google</button>
+                <button className="button" type="button" onClick={() => signIn('discord')}>Sign in with discord</button>
+                <button className="button" type="button" onClick={() => signIn('github')}>Sign in with github</button>
+
+                {searchParams.error === 'OAuthAccountNotLinked' && <ErrorBox>Your account was created with a different provider, please login with that provider</ErrorBox>}
             </motion.div>
         </div>
     );
