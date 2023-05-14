@@ -52,7 +52,9 @@ export const AccountSection = ({ user }: { user: User }) => {
                 onClick={() => setModalOpen(true)}
                 type="button"
             >
-                <Image src={user.image} width={48} height={48} alt="profile" className="h-12 w-12 rounded-full" />
+                {/* Cannot use next/image because it needs a specified width and height which is unknown */}
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={user.image} alt="profile" className="h-12 w-12 rounded-full" />
                 <Image src={caretIcon} alt="caret" />
             </button>
             <ModalWrapper open={modalOpen} onClose={() => setModalOpen(false)}>

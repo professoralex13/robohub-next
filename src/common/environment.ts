@@ -12,3 +12,5 @@ const EnvironmentSchema = yup.object().shape({
 });
 
 export const env = EnvironmentSchema.validateSync(ENV);
+
+export const ContentDeliveryRoot = 'https://storage.googleapis.com/robohub-public/';
