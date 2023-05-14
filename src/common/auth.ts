@@ -1,7 +1,7 @@
 import { prisma } from '@/common/prisma';
 import { NextAuthOptions } from 'next-auth';
 import { PrismaAdapter } from '@next-auth/prisma-adapter';
-import GoogleProvider from "next-auth/providers/google";
+import GoogleProvider from 'next-auth/providers/google';
 
 export const nextAuthOptions: NextAuthOptions = {
     adapter: PrismaAdapter(prisma),
@@ -18,10 +18,10 @@ export const nextAuthOptions: NextAuthOptions = {
             session.user = user;
 
             return session;
-        }
+        },
     },
     session: {
-        strategy: "database",
+        strategy: 'database',
     },
     pages: {
         signIn: '/sign-in',

@@ -7,7 +7,6 @@ import { motion } from 'framer-motion';
 import { useRouter } from 'next/navigation';
 import { FC, useState } from 'react';
 import { Oval } from 'react-loading-icons';
-import PFP from '@public/pfp.png';
 import Image from 'next/image';
 import { useConfirmation } from '@/app/contexts/ConfirmationContext';
 import { useOrganisation } from '../OrganisationContext';
@@ -49,7 +48,7 @@ const UserCard: FC<UserCardProps> = ({ user, onSelect }) => {
                 isLoading ? 'opacity-50 blur-sm' : 'group-hover:opacity-50 group-hover:blur-sm',
             )}
             >
-                <Image src={PFP} alt="profile" className="col-span-1 col-start-1 row-span-2 row-start-1 h-14 w-14 rounded-full" />
+                <Image src={user.image} width={56} height={56} alt="profile" className="col-span-1 col-start-1 row-span-2 row-start-1 h-14 w-14 rounded-full" />
                 <span className="col-start-2 row-start-1 text-start text-xl">{user.name}</span>
                 <span className="col-start-2 row-start-2 text-start text-lg text-slate-300">{user.email}</span>
             </div>

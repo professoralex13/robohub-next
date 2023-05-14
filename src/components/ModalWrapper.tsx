@@ -1,5 +1,3 @@
-'use client';
-
 import { AnimatePresence } from 'framer-motion';
 import { FC, PropsWithChildren, useEffect } from 'react';
 

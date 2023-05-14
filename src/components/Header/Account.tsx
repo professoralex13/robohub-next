@@ -7,8 +7,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { FC, useState } from 'react';
 import Image from 'next/image';
-import PFP from '@public/pfp.png';
-import caretIcon from '@public/Caret.svg';
+import caretIcon from './Caret.svg';
 import { ModalWrapper } from '../ModalWrapper';
 
 interface AccountModalProps {
@@ -53,7 +52,7 @@ export const AccountSection = ({ user }: { user: User }) => {
                 onClick={() => setModalOpen(true)}
                 type="button"
             >
-                <Image src={PFP} alt="profile" className="h-12 w-12 rounded-full" />
+                <Image src={user.image} width={48} height={48} alt="profile" className="h-12 w-12 rounded-full" />
                 <Image src={caretIcon} alt="caret" />
             </button>
             <ModalWrapper open={modalOpen} onClose={() => setModalOpen(false)}>

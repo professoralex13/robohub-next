@@ -20,7 +20,7 @@ const SignIn = () => {
                 initial={{ opacity: 0, y: 100 }}
                 animate={{ opacity: 1, y: 0 }}
             >
-                <button className="button" onClick={() => signIn('google')}>Sign in with google</button>
+                <button className="button" type="button" onClick={() => signIn('google')}>Sign in with google</button>
             </motion.div>
         </div>
     );
