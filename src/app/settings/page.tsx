@@ -5,6 +5,7 @@ import { protectedClientPage } from '@/components/protectedClientPage';
 import { ImageUpload } from '@/components/ImageUpload';
 import { trpc } from '@/common/trpc';
 import { useRouter } from 'next/navigation';
+import { Oval } from 'react-loading-icons';
 
 const Settings = protectedClientPage(({ user }) => {
     const { mutateAsync: createPresignedUrl } = trpc.react.account.uploadAvatarPresignedUrl.useMutation();
@@ -39,10 +40,10 @@ const Settings = protectedClientPage(({ user }) => {
                     router.push('/');
                 }}
             >
-                {({ values, submitForm }) => (
+                {({ values, submitForm, isSubmitting }) => (
                     <div className="card flex flex-col items-center gap-5 p-3">
                         <ImageUpload name="file" acceptedTypes={['image/png', 'image/jpeg']} existingImageUrl={user.image} maxSize={9000000} />
-                        {values.file && <button className="button" type="submit" onClick={submitForm}>Upload Avatar</button>}
+                        {values.file && (isSubmitting ? <Oval /> : <button className="button" type="submit" onClick={submitForm}>Upload Avatar</button>)}
                     </div>
                 )}
             </Formik>
