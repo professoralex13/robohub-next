@@ -50,3 +50,16 @@ export const CreateOrganisationSchema = yup.object().shape({
         .max(20)
         .required(),
 });
+
+export const CreateTeamSchema = yup.object().shape({
+    id: yup
+        .string()
+        .matches(/^[1-9][0-9]{1,4}[A-Z]$/, 'Invalid ID, eg: 99999V')
+        .required(),
+    name: yup
+        .string()
+        .matches(/^\S+$/, 'name cannot have spaces')
+        .min(3)
+        .max(20)
+        .required(),
+});

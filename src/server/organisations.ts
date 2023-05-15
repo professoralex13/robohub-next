@@ -1,7 +1,7 @@
 import * as yup from 'yup';
 import { MembershipType } from '@/common';
 import { prisma } from '@/common/prisma';
-import { CreateOrganisationSchema } from '@/common/schema';
+import { CreateOrganisationSchema, CreateTeamSchema } from '@/common/schema';
 import { publicProcedure, router } from './trpc';
 import { getAuthenticatedUser, getOrganisation, getUser } from './utils';
 
@@ -10,6 +10,24 @@ export const organisationRouter = router({
         const organisation = await prisma.organisation.findFirst({ where: { name: input } });
 
         return !!organisation;
+    }),
+
+    teamNameTaken: publicProcedure.input(yup.object().shape({
+        teamName: yup.string().required(),
+        organisationName: yup.string().required(),
+    })).query(async ({ input }) => {
+        const { teamName, organisationName } = input;
+
+        const team = await prisma.team.findFirst({
+            where: {
+                name: teamName,
+                organisation: {
+                    name: organisationName,
+                },
+            },
+        });
+
+        return !!team;
     }),
 
     create: publicProcedure.input(CreateOrganisationSchema).mutation(async ({ ctx, input }) => {
@@ -67,5 +85,23 @@ export const organisationRouter = router({
                 },
             },
         });
+    }),
+
+    createTeam: publicProcedure.input(
+        CreateTeamSchema.concat(yup.object().shape({ organisationName: yup.string().required() })),
+    ).mutation(async ({ ctx, input }) => {
+        const { organisationName, id, name } = input;
+
+        const organisation = await getOrganisation(ctx, organisationName, MembershipType.Admin);
+
+        const team = await prisma.team.create({
+            data: {
+                id,
+                name,
+                organisationId: organisation.id,
+            },
+        });
+
+        return team;
     }),
 });
