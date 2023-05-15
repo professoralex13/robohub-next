@@ -28,9 +28,9 @@ const SignIn: FC<SignInPageProps> = ({ searchParams }) => {
                 initial={{ opacity: 0, y: 100 }}
                 animate={{ opacity: 1, y: 0 }}
             >
-                <button className="button" type="button" onClick={() => signIn('google')}>Sign in with google</button>
-                <button className="button" type="button" onClick={() => signIn('discord')}>Sign in with discord</button>
-                <button className="button" type="button" onClick={() => signIn('github')}>Sign in with github</button>
+                <button className="button" type="button" onClick={() => signIn('google', { callbackUrl: '/' })}>Sign in with google</button>
+                <button className="button" type="button" onClick={() => signIn('discord', { callbackUrl: '/' })}>Sign in with discord</button>
+                <button className="button" type="button" onClick={() => signIn('github', { callbackUrl: '/' })}>Sign in with github</button>
 
                 {searchParams.error === 'OAuthAccountNotLinked' && <ErrorBox>Your account was created with a different provider, please login with that provider</ErrorBox>}
             </motion.div>
