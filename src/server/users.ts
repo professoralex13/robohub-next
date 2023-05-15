@@ -14,7 +14,7 @@ export const usersRouter = router({
 
         const users = await prisma.user.findMany({
             where: {
-                OR: [{ email: { contains: query } }, { name: { contains: query } }],
+                OR: [{ email: { contains: query, mode: 'insensitive' } }, { name: { contains: query, mode: 'insensitive' } }],
                 organisations: ignoredOrganisation ? {
                     every: {
                         NOT: {
