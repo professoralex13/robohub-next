@@ -43,7 +43,7 @@ const CreateOrganisation = protectedClientPage(() => {
                             location,
                         });
 
-                        router.push(`/organisations/${organisation.name}`);
+                        router.push(`/organisations/${organisation.name}/overview`);
                     }}
                     validationSchema={CreateOrganisationSchema}
                 >
