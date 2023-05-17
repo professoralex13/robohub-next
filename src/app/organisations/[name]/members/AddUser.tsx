@@ -44,7 +44,7 @@ const UserCard: FC<UserCardProps> = ({ user, onSelect }) => {
             type="button"
         >
             <div className={clsx(
-                'card grid auto-cols-max gap-x-3 p-2 duration-200',
+                'card grid w-full auto-cols-max gap-x-3 overflow-hidden text-clip p-2 duration-200',
                 isLoading ? 'opacity-50 blur-sm' : 'group-hover:opacity-50 group-hover:blur-sm',
             )}
             >
@@ -75,18 +75,20 @@ const AddUserModal: FC<{ onClose: () => void }> = ({ onClose }) => {
 
     return (
         <motion.div
-            className="card absolute right-0 top-14 w-max space-y-3 p-5"
+            className="card absolute right-0 top-14 w-96 space-y-3 p-5"
             initial={{ clipPath: 'inset(0 0 100% 0)' }}
             animate={{ clipPath: 'inset(0)' }}
             exit={{ clipPath: 'inset(0 0 100% 0)' }}
         >
-            <input type="text" placeholder="email/username/full name" value={query} onChange={(e) => setQuery(e.target.value)} />
+            <input className="w-full" type="text" placeholder="email/username/full name" value={query} onChange={(e) => setQuery(e.target.value)} />
 
             {/* List must be hidden when length zero so space-y-3 does not create empty space */}
-            <div className={clsx('flex max-h-[50vh] flex-col items-center gap-3 overflow-y-auto', (data?.length === 0 || query === '') && 'hidden')}>
-                {data === undefined ? <Oval /> : data.map((user) => (
-                    <UserCard key={user.id} user={user} onSelect={onClose} />
-                ))}
+            <div className={clsx('flex max-h-[50vh] flex-col items-center gap-3 overflow-y-auto', (query === '') && 'hidden')}>
+                {data === undefined ? <Oval />
+                    : data.length === 0 ? <span className="text-xl text-slate-400">No Users found</span>
+                        : data.map((user) => (
+                            <UserCard key={user.id} user={user} onSelect={onClose} />
+                        ))}
             </div>
         </motion.div>
     );
