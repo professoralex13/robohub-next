@@ -1,6 +1,6 @@
 'use client';
 
-import { motion } from 'framer-motion';
+import { m } from 'framer-motion';
 import { signIn, useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { ErrorBox } from '@/components/Notification';
@@ -23,7 +23,7 @@ const SignIn: FC<SignInPageProps> = ({ searchParams }) => {
 
     return (
         <div className="overflow-hidden">
-            <motion.div
+            <m.div
                 className="flex h-screen flex-col items-center justify-center gap-16"
                 initial={{ opacity: 0, y: 100 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -33,7 +33,7 @@ const SignIn: FC<SignInPageProps> = ({ searchParams }) => {
                 <button className="button" type="button" onClick={() => signIn('github', { callbackUrl: '/' })}>Sign in with github</button>
 
                 {searchParams.error === 'OAuthAccountNotLinked' && <ErrorBox>Your account was created with a different provider, please login with that provider</ErrorBox>}
-            </motion.div>
+            </m.div>
         </div>
     );
 };

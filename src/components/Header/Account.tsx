@@ -1,6 +1,6 @@
 'use client';
 
-import { motion } from 'framer-motion';
+import { m } from 'framer-motion';
 import { User } from 'next-auth';
 import { signOut } from 'next-auth/react';
 import Link from 'next/link';
@@ -19,7 +19,7 @@ const AccountModal: FC<AccountModalProps> = ({ name, onSelect }) => {
     const router = useRouter();
 
     return (
-        <motion.div
+        <m.div
             className="card absolute right-0 top-16 flex w-max flex-col"
             initial={{ clipPath: 'inset(0 0 100% 0)' }}
             animate={{ clipPath: 'inset(0)' }}
@@ -38,7 +38,7 @@ const AccountModal: FC<AccountModalProps> = ({ name, onSelect }) => {
                     Sign out
                 </button>
             </div>
-        </motion.div>
+        </m.div>
     );
 };
 

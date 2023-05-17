@@ -1,6 +1,6 @@
 'use client';
 
-import { AnimatePresence, motion } from 'framer-motion';
+import { AnimatePresence, m } from 'framer-motion';
 import { FC, PropsWithChildren, ReactNode, createContext, useCallback, useContext, useMemo, useState } from 'react';
 
 const DialogContext = createContext<(dialog: ReactNode, onClose?: () => void) => void>(undefined!);
@@ -23,7 +23,7 @@ export const DialogContextProvider: FC<PropsWithChildren> = ({ children }) => {
         >
             <AnimatePresence>
                 {dialog && (
-                    <motion.div
+                    <m.div
                         className="absolute z-20 flex h-screen w-screen flex-col items-center justify-end overflow-hidden p-10 backdrop-blur-md"
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
@@ -40,7 +40,7 @@ export const DialogContextProvider: FC<PropsWithChildren> = ({ children }) => {
                         }}
                     >
                         {dialog}
-                    </motion.div>
+                    </m.div>
                 )}
             </AnimatePresence>
             {useMemo(() => children, [children])}

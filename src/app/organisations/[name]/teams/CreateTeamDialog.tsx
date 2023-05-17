@@ -2,7 +2,7 @@
 
 import { X } from 'tabler-icons-react';
 import { useDialogContext } from '@/app/contexts/DialogContext';
-import { motion } from 'framer-motion';
+import { m } from 'framer-motion';
 import { FC } from 'react';
 import { Form, Formik } from 'formik';
 import { TextField } from '@/components/TextField';
@@ -25,7 +25,7 @@ export const CreateTeamDialog: FC<CreateTeamDialogProps> = ({ organisation }) =>
     const router = useRouter();
 
     return (
-        <motion.div
+        <m.div
             initial={{ y: 400 }}
             animate={{ y: 0 }}
             exit={{ y: 400 }}
@@ -78,6 +78,6 @@ export const CreateTeamDialog: FC<CreateTeamDialogProps> = ({ organisation }) =>
                 )}
             </Formik>
 
-        </motion.div>
+        </m.div>
     );
 };

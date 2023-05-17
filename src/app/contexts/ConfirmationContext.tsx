@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion';
+import { m } from 'framer-motion';
 import { FC, PropsWithChildren, ReactElement, createContext, useCallback, useContext } from 'react';
 import { CircleCheck, CircleX } from 'tabler-icons-react';
 import { useDialogContext } from './DialogContext';
@@ -10,7 +10,7 @@ interface ConfirmationDialogProps {
 }
 
 export const ConfirmationDialog: FC<PropsWithChildren<ConfirmationDialogProps>> = ({ onSelect, children }) => (
-    <motion.div
+    <m.div
         className="card flex flex-col items-center gap-2 p-3"
         initial={{ y: 150 }}
         animate={{ y: 0 }}
@@ -22,7 +22,7 @@ export const ConfirmationDialog: FC<PropsWithChildren<ConfirmationDialogProps>> 
             <CircleX size={40} className="cursor-pointer duration-200 hover:stroke-red-500" onClick={() => onSelect(false)} />
             <CircleCheck size={40} className="cursor-pointer duration-200 hover:stroke-green-500" onClick={() => onSelect(true)} />
         </div>
-    </motion.div>
+    </m.div>
 );
 
 export const ConfirmationContextProvider: FC<PropsWithChildren> = ({ children }) => {

@@ -4,7 +4,7 @@ import { Form, Formik } from 'formik';
 import { Oval } from 'react-loading-icons';
 import { TextField } from '@/components/TextField';
 import { ErrorBox } from '@/components/Notification';
-import { motion } from 'framer-motion';
+import { m } from 'framer-motion';
 import { trpc } from '@/common/trpc';
 import { protectedClientPage } from '@/components/protectedClientPage';
 import { useRouter } from 'next/navigation';
@@ -21,7 +21,7 @@ const CreateOrganisation = protectedClientPage(() => {
 
     return (
         <div className="overflow-hidden">
-            <motion.div
+            <m.div
                 className="flex h-screen flex-col items-center justify-center gap-16"
                 initial={{ opacity: 0, y: 100 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -62,7 +62,7 @@ const CreateOrganisation = protectedClientPage(() => {
                         </Form>
                     )}
                 </Formik>
-            </motion.div>
+            </m.div>
         </div>
     );
 });

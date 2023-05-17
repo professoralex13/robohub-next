@@ -6,6 +6,7 @@ import { SessionProvider } from 'next-auth/react';
 import { FC, PropsWithChildren } from 'react';
 import { DialogContextProvider } from '@/app/contexts/DialogContext';
 import { ConfirmationContextProvider } from '@/app/contexts/ConfirmationContext';
+import { LazyMotion, domMax } from 'framer-motion';
 
 interface ProvidersProps {
     session: Session;
@@ -13,11 +14,13 @@ interface ProvidersProps {
 
 const Providers: FC<PropsWithChildren<ProvidersProps>> = ({ session, children }) => (
     <SessionProvider session={session}>
-        <DialogContextProvider>
-            <ConfirmationContextProvider>
-                {children}
-            </ConfirmationContextProvider>
-        </DialogContextProvider>
+        <LazyMotion features={domMax}>
+            <DialogContextProvider>
+                <ConfirmationContextProvider>
+                    {children}
+                </ConfirmationContextProvider>
+            </DialogContextProvider>
+        </LazyMotion>
     </SessionProvider>
 );
 

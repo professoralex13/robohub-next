@@ -1,7 +1,7 @@
 'use client';
 
 import { Organisation } from '@prisma/client';
-import { motion } from 'framer-motion';
+import { m } from 'framer-motion';
 import { Route } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -25,7 +25,7 @@ const HeaderLink = <T extends string>({ symbol: Symbol, count, children, url }: 
             <Symbol size={25} className="group-hover:stroke-navy-300" />
             <span className="text-xl group-hover:text-navy-300">{children}</span>
             {count !== undefined && <span className="rounded-full border-2 px-1 text-lg group-hover:border-navy-300 group-hover:text-navy-300">{count}</span>}
-            {isActive && <motion.div layoutId="organisation-header-underline" className="absolute inset-x-0 -bottom-1 h-0.5 rounded-full bg-white group-hover:bg-navy-300" />}
+            {isActive && <m.div layoutId="organisation-header-underline" className="absolute inset-x-0 -bottom-1 h-0.5 rounded-full bg-white group-hover:bg-navy-300" />}
         </Link>
     );
 };

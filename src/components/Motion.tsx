@@ -4,6 +4,6 @@
  * Marks motion components as client
  */
 
-import { motion } from 'framer-motion';
+import { m } from 'framer-motion';
 
-export const MotionDiv = motion.div;
+export const MotionDiv = m.div;

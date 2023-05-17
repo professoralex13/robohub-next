@@ -3,7 +3,7 @@
 import { trpc } from '@/common/trpc';
 import { User } from '@prisma/client';
 import clsx from 'clsx';
-import { motion } from 'framer-motion';
+import { m } from 'framer-motion';
 import { useRouter } from 'next/navigation';
 import { FC, useState } from 'react';
 import { Oval } from 'react-loading-icons';
@@ -74,7 +74,7 @@ const AddUserModal: FC<{ onClose: () => void }> = ({ onClose }) => {
     const { data } = trpc.react.users.query.useQuery({ query, take: 10, ignoredOrganisation: organisation.name }, { cacheTime: 0 });
 
     return (
-        <motion.div
+        <m.div
             className="card absolute right-0 top-14 w-96 space-y-3 p-5"
             initial={{ clipPath: 'inset(0 0 100% 0)' }}
             animate={{ clipPath: 'inset(0)' }}
@@ -90,7 +90,7 @@ const AddUserModal: FC<{ onClose: () => void }> = ({ onClose }) => {
                             <UserCard key={user.id} user={user} onSelect={onClose} />
                         ))}
             </div>
-        </motion.div>
+        </m.div>
     );
 };
 
