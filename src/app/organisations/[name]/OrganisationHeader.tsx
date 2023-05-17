@@ -46,12 +46,12 @@ export const OrganisationHeader: FC<OrganisationHeaderProps> = ({ organisation, 
         </div>
 
         <div className="flex flex-row items-center gap-10 gap-y-5">
-            <HeaderLink url={`/organisations/${organisation.name}/overview`} symbol={Dashboard}>Overview</HeaderLink>
-            <HeaderLink url={`/organisations/${organisation.name}/blogs`} symbol={Notes}>Blogs</HeaderLink>
-            <HeaderLink url={`/organisations/${organisation.name}/parts`} symbol={List}>Parts</HeaderLink>
-            <HeaderLink url={`/organisations/${organisation.name}/members`} symbol={User} count={memberCount}>Members</HeaderLink>
-            <HeaderLink url={`/organisations/${organisation.name}/teams`} symbol={Users} count={teamCount}>Teams</HeaderLink>
-            <HeaderLink url={`/organisations/${organisation.name}/settings`} symbol={Settings}>Settings</HeaderLink>
+            <HeaderLink url={`/organisations/${organisation.urlName}/overview`} symbol={Dashboard}>Overview</HeaderLink>
+            <HeaderLink url={`/organisations/${organisation.urlName}/blogs`} symbol={Notes}>Blogs</HeaderLink>
+            <HeaderLink url={`/organisations/${organisation.urlName}/parts`} symbol={List}>Parts</HeaderLink>
+            <HeaderLink url={`/organisations/${organisation.urlName}/members`} symbol={User} count={memberCount}>Members</HeaderLink>
+            <HeaderLink url={`/organisations/${organisation.urlName}/teams`} symbol={Users} count={teamCount}>Teams</HeaderLink>
+            <HeaderLink url={`/organisations/${organisation.urlName}/settings`} symbol={Settings}>Settings</HeaderLink>
         </div>
     </div>
 );

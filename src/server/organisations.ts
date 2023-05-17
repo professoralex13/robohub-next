@@ -3,26 +3,27 @@ import { MembershipType } from '@/common';
 import { prisma } from '@/common/prisma';
 import { CreateOrganisationSchema, CreateTeamSchema } from '@/common/schema';
 import { publicProcedure, router } from './trpc';
-import { getAuthenticatedUser, getOrganisation, getUser } from './utils';
+import { getAuthenticatedUser, getOrganisation, getUser, transformUrlName } from './utils';
 
 export const organisationRouter = router({
     nameTaken: publicProcedure.input(yup.string().required()).query(async ({ input }) => {
-        const organisation = await prisma.organisation.findFirst({ where: { name: input } });
+        const urlName = transformUrlName(input);
+        const organisation = await prisma.organisation.findFirst({ where: { OR: [{ name: input }, { urlName }] } });
 
         return !!organisation;
     }),
 
     teamNameTaken: publicProcedure.input(yup.object().shape({
         teamName: yup.string().required(),
-        organisationName: yup.string().required(),
+        organisationId: yup.number().required(),
     })).query(async ({ input }) => {
-        const { teamName, organisationName } = input;
+        const { teamName, organisationId } = input;
 
         const team = await prisma.team.findFirst({
             where: {
                 name: teamName,
                 organisation: {
-                    name: organisationName,
+                    id: organisationId,
                 },
             },
         });
@@ -32,10 +33,14 @@ export const organisationRouter = router({
 
     create: publicProcedure.input(CreateOrganisationSchema).mutation(async ({ ctx, input }) => {
         const user = getAuthenticatedUser(ctx);
+        const { name, location, description } = input;
 
-        const organisation = await prisma.organisation.create({
+        return prisma.organisation.create({
             data: {
-                ...input,
+                name,
+                urlName: transformUrlName(name),
+                location,
+                description,
                 users: {
                     create: {
                         isAdmin: true,
@@ -44,19 +49,17 @@ export const organisationRouter = router({
                 },
             },
         });
-
-        return organisation;
     }),
 
     addUser: publicProcedure.input(yup.object().shape({
-        organisationName: yup.string().required(),
-        id: yup.string().required(),
+        userId: yup.string().required(),
+        organisationId: yup.number().required(),
     })).mutation(async ({ ctx, input }) => {
-        const { organisationName, id } = input;
+        const { userId, organisationId } = input;
 
-        const organisation = await getOrganisation(ctx, organisationName, MembershipType.Admin);
+        const organisation = await getOrganisation(ctx, organisationId, MembershipType.Admin);
 
-        const user = await getUser(id);
+        const user = await getUser(userId);
 
         await prisma.organisationUser.create({
             data: {
@@ -68,14 +71,14 @@ export const organisationRouter = router({
     }),
 
     removeUser: publicProcedure.input(yup.object().shape({
-        organisationName: yup.string().required(),
-        id: yup.string().required(),
+        userId: yup.string().required(),
+        organisationId: yup.number().required(),
     })).mutation(async ({ ctx, input }) => {
-        const { organisationName, id } = input;
+        const { userId, organisationId } = input;
 
-        const organisation = await getOrganisation(ctx, organisationName, MembershipType.Admin);
+        const organisation = await getOrganisation(ctx, organisationId, MembershipType.Admin);
 
-        const user = await getUser(id);
+        const user = await getUser(userId);
 
         await prisma.organisationUser.delete({
             where: {
@@ -88,20 +91,18 @@ export const organisationRouter = router({
     }),
 
     createTeam: publicProcedure.input(
-        CreateTeamSchema.concat(yup.object().shape({ organisationName: yup.string().required() })),
+        CreateTeamSchema.concat(yup.object().shape({ organisationId: yup.number().required() })),
     ).mutation(async ({ ctx, input }) => {
-        const { organisationName, id, name } = input;
+        const { organisationId, id, name } = input;
 
-        const organisation = await getOrganisation(ctx, organisationName, MembershipType.Admin);
+        const organisation = await getOrganisation(ctx, organisationId, MembershipType.Admin);
 
-        const team = await prisma.team.create({
+        return prisma.team.create({
             data: {
                 id,
                 name,
                 organisationId: organisation.id,
             },
         });
-
-        return team;
     }),
 });

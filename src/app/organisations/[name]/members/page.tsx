@@ -1,9 +1,9 @@
-import { prisma } from '@/common/prisma';
+import { getOrganisation } from '@/app/organisations/[name]/utils';
 import { MemberRow } from './MemberRow';
 import { OrganisationPageProps } from '../layout';
 
 const MembersList = async ({ params }: OrganisationPageProps) => {
-    const members = await prisma.organisation.findUniqueOrThrow({ where: { name: params.name } }).users({
+    const members = await getOrganisation(params).users({
         include: {
             user: true,
         },

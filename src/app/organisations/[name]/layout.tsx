@@ -10,7 +10,7 @@ export interface OrganisationPageProps<P = {}> { params: { name: string } & P }
 
 const OrganisationRoot = protectedServerPage<PropsWithChildren<OrganisationPageProps>>(async ({ params: { name }, children, user }) => {
     const organisation = await prisma.organisation.findFirst({
-        where: { name },
+        where: { urlName: name },
         include: {
             users: true,
             _count: {

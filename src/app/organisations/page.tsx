@@ -27,7 +27,7 @@ const OrganisationList = protectedServerPage(async ({ user }) => {
                     <div className="card flex w-[33vw] flex-col gap-5 p-5">
                         {organisations.map((organisation) => (
                             <Link
-                                href={`/organisations/${organisation.name}/overview`}
+                                href={`/organisations/${organisation.urlName}/overview`}
                                 className="flex cursor-pointer flex-row items-center justify-between rounded-lg p-2 duration-100 hover:bg-slate-700"
                             >
                                 <span className="text-4xl">{organisation.name}</span>

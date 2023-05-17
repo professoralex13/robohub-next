@@ -31,8 +31,8 @@ const UserCard: FC<UserCardProps> = ({ user, onSelect }) => {
             onClick={!isLoading ? (async () => {
                 if (await confirm(<span>Add <strong>{user.name}</strong> to <strong>{organisation.name}</strong></span>)) {
                     await mutateAsync({
-                        organisationName: organisation.name,
-                        id: user.id,
+                        userId: user.id,
+                        organisationId: organisation.id,
                     });
 
                     // Close Dialog before refreshing page to ensure user list query is immediately cleared

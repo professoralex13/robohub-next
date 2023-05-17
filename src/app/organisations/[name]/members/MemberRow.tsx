@@ -42,8 +42,8 @@ export const MemberRow = protectedClientPage<MemberRowProps>(({ member, user: lo
                     onClick={async () => {
                         if (await confirm(<span>Remove <strong>{user.name}</strong> from <strong>{organisation.name}</strong></span>)) {
                             await mutateAsync({
-                                organisationName: organisation.name,
-                                id: user.id,
+                                organisationId: organisation.id,
+                                userId: user.id,
                             });
 
                             router.refresh();

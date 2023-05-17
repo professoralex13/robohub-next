@@ -1,10 +1,10 @@
 import { OrganisationPageProps } from '@/app/organisations/[name]/layout';
-import { prisma } from '@/common/prisma';
 import { TeamCard } from '@/app/organisations/[name]/teams/TeamCard';
 import { WarningBox } from '@/components/Notification';
+import { getOrganisation } from '@/app/organisations/[name]/utils';
 
 const TeamsList = async ({ params }: OrganisationPageProps) => {
-    const teams = await prisma.organisation.findUniqueOrThrow({ where: { name: params.name } }).teams({
+    const teams = await getOrganisation(params).teams({
         include: {
             _count: {
                 select: {

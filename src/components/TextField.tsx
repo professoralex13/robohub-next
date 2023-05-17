@@ -1,21 +1,13 @@
 'use client';
 
-import { ChangeEvent, FC } from 'react';
+import { FC } from 'react';
 import { Field, FieldAttributes, useField } from 'formik';
 import clsx from 'clsx';
 
-export const TextField: FC<FieldAttributes<any> & { disallowSpaces?: boolean }> = ({ type = 'text', disallowSpaces, ...props }) => {
-    const [field, meta, { setValue }] = useField(props);
+export const TextField: FC<FieldAttributes<any>> = ({ type = 'text', ...props }) => {
+    const [field, meta] = useField(props);
 
     const hasError = meta.error && meta.touched;
-
-    const onChange = (e: ChangeEvent<HTMLInputElement>) => {
-        if (disallowSpaces) {
-            setValue(e.target.value.replace(/[-\s]+/g, '-').replace(/^-/, ''));
-        } else {
-            setValue(e.target.value);
-        }
-    };
 
     return (
         <div className="relative flex flex-col">
@@ -28,7 +20,7 @@ export const TextField: FC<FieldAttributes<any> & { disallowSpaces?: boolean }> 
             >
                 {props.placeholder}
             </span>
-            <Field {...props} onChange={onChange} type={type} className={clsx(hasError && 'error')} />
+            <Field {...props} type={type} className={clsx(hasError && 'error')} />
             <span
                 className={clsx(
                     !hasError && 'opacity-0',

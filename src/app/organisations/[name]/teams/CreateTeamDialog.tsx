@@ -11,12 +11,13 @@ import { Oval } from 'react-loading-icons';
 import { trpc } from '@/common/trpc';
 import { useRouter } from 'next/navigation';
 import { CreateTeamSchema } from '@/common/schema';
+import { Organisation } from '@prisma/client';
 
 interface CreateTeamDialogProps {
-    organisationName: string;
+    organisation: Organisation;
 }
 
-export const CreateTeamDialog: FC<CreateTeamDialogProps> = ({ organisationName }) => {
+export const CreateTeamDialog: FC<CreateTeamDialogProps> = ({ organisation }) => {
     const openDialog = useDialogContext();
 
     const { mutateAsync } = trpc.react.organisation.createTeam.useMutation();
@@ -31,13 +32,13 @@ export const CreateTeamDialog: FC<CreateTeamDialogProps> = ({ organisationName }
             className="card absolute flex flex-col items-center gap-5 px-20 py-10"
         >
             <X className="absolute right-3 top-3 cursor-pointer duration-200 hover:stroke-red-500" size={30} onClick={() => openDialog(null)} />
-            <span className="text-4xl">Create Team for <strong>{organisationName}</strong></span>
+            <span className="text-4xl">Create Team for <strong>{organisation.name}</strong></span>
             <Formik
                 initialValues={{ id: '', name: '' }}
                 onSubmit={async ({ id, name }, { setFieldError }) => {
                     const [idTaken, nameTaken] = await Promise.all([
                         trpc.client.teams.idTaken.query(id),
-                        trpc.client.organisation.teamNameTaken.query({ organisationName, teamName: name }),
+                        trpc.client.organisation.teamNameTaken.query({ organisationId: organisation.id, teamName: name }),
                     ]);
 
                     if (idTaken) {
@@ -55,7 +56,7 @@ export const CreateTeamDialog: FC<CreateTeamDialogProps> = ({ organisationName }
                     await mutateAsync({
                         id,
                         name,
-                        organisationName,
+                        organisationId: organisation.id,
                     });
 
                     router.refresh();

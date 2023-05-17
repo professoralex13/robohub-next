@@ -1,12 +1,14 @@
 import * as yup from 'yup';
 
+export const UrlCompliant = /^[\w-]*$/;
+export const PreUrlCompliant = /^[\w -]*$/;
 
 // TODO: Decide max values these based on UI
 export const CreateOrganisationSchema = yup.object().shape({
     name: yup
         .string()
         .min(3)
-        .matches(/^\S+$/, 'name cannot have spaces')
+        .matches(PreUrlCompliant, 'Name Must not have any special characters')
         .required(),
     description: yup
         .string()
@@ -27,7 +29,7 @@ export const CreateTeamSchema = yup.object().shape({
         .required(),
     name: yup
         .string()
-        .matches(/^\S+$/, 'name cannot have spaces')
+        .matches(PreUrlCompliant, 'Name Must not have any special characters')
         .min(3)
         .max(20)
         .required(),

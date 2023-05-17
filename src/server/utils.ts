@@ -33,10 +33,10 @@ export async function getUser(id: string) {
     return user;
 }
 
-export async function getOrganisation(context: Context, name: string, minimumMembership: MembershipType = MembershipType.Member) {
+export async function getOrganisation(context: Context, id: number, minimumMembership: MembershipType = MembershipType.Member) {
     const organisation = await prisma.organisation.findUnique({
         where: {
-            name,
+            id,
         },
         include: {
             users: true,
@@ -46,7 +46,7 @@ export async function getOrganisation(context: Context, name: string, minimumMem
     if (!organisation) {
         throw new TRPCError({
             code: 'NOT_FOUND',
-            message: `No organisation could be found with the name: ${name}`,
+            message: `No organisation could be found with the id: ${id}`,
         });
     }
 
@@ -68,10 +68,14 @@ export async function getOrganisation(context: Context, name: string, minimumMem
         if (membershipType < minimumMembership) {
             throw new TRPCError({
                 code: 'FORBIDDEN',
-                message: `You are not a high enough member of the organisation: ${name}`,
+                message: `You are not a high enough member of the organisation: ${organisation.id}`,
             });
         }
     }
 
     return organisation;
+}
+
+export function transformUrlName(name: string) {
+    return name.replaceAll(' ', '-');
 }

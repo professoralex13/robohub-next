@@ -74,6 +74,7 @@ model OrganisationUser {
 model Organisation {
     id          Int                @id @default(autoincrement())
     name        String             @unique
+    urlName     String             @unique
     description String
     location    String
     teams       Team[]

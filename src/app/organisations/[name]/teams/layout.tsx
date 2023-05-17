@@ -18,7 +18,7 @@ const Teams: FC<PropsWithChildren> = ({ children }) => {
                 <input placeholder="Find Teams" type="text" className="row-span-1" />
                 {organisation.membershipType >= MembershipType.Admin && (
                     <div className="relative col-start-4">
-                        <button type="button" className="button" onClick={() => openDialog(<CreateTeamDialog organisationName={organisation.name} />)}>
+                        <button type="button" className="button" onClick={() => openDialog(<CreateTeamDialog organisation={organisation} />)}>
                             Create Team
                         </button>
                     </div>
