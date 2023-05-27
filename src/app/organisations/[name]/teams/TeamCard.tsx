@@ -1,6 +1,7 @@
 import { Notebook, User } from 'tabler-icons-react';
 import { Team } from '@prisma/client';
 import { FC } from 'react';
+import Link from 'next/link';
 
 interface TeamCardProps {
     team: Team;
@@ -9,7 +10,7 @@ interface TeamCardProps {
 }
 
 export const TeamCard: FC<TeamCardProps> = ({ team, memberCount, notebookCount }) => (
-    <div className="card grow cursor-pointer space-y-5 p-5 duration-150 hover:border-navy-300">
+    <Link href={`/teams/${team.id}`} className="card grow cursor-pointer space-y-5 p-5 duration-150 hover:border-navy-300">
         <div className="flex gap-5">
             <strong className="text-3xl">{team.id}</strong>
             <span className="text-3xl">{team.name}</span>
@@ -26,5 +27,5 @@ export const TeamCard: FC<TeamCardProps> = ({ team, memberCount, notebookCount }
                 <span className="rounded-full border-2 px-1 text-lg">{notebookCount}</span>
             </div>
         </div>
-    </div>
+    </Link>
 );
