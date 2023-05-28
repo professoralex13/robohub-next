@@ -1,49 +1,57 @@
-import { prisma } from '@/common/prisma';
-import { notFound } from 'next/navigation';
-import { protectedServerPage } from '@/components/protectedServerPage';
-import { PropsWithChildren } from 'react';
 import { MembershipType } from '@/common';
+import { prisma } from '@/common/prisma';
+import { protectedServerPage } from '@/components/protectedServerPage';
+import { notFound } from 'next/navigation';
+import { PropsWithChildren } from 'react';
 import { Dashboard, Users } from 'tabler-icons-react';
-import { motion } from 'framer-motion';
 
 export interface TeamPageProps<P = {}> { params: { id: string } & P }
 
 const TeamRoot = protectedServerPage<PropsWithChildren<TeamPageProps>>(async ({ params: { id }, children, user }) => {
-    // const team = await prisma.team.findFirst({
-    //     where: { id },
-    //     include: { users: true },
-    // });
-    //
-    // if (!team) {
-    //     notFound();
-    // }
-    //
-    // let membershipType = MembershipType.None;
-    //
-    // for (const member of team.users) {
-    //     if (member.userId === user.id) {
-    //         if (member.isLeader) {
-    //             membershipType = MembershipType.Admin;
-    //         } else {
-    //             membershipType = MembershipType.Member;
-    //         }
-    //     }
-    // }
-    //
-    // if (membershipType === MembershipType.None) {
-    //     notFound();
-    // }
+    const team = await prisma.team.findFirst({
+        where: { id },
+        include: {
+            users: true,
+            organisation: {
+                include: {
+                    users: true,
+                },
+            },
+        },
+    });
 
-    const a = 5;
+    if (!team) {
+        notFound();
+    }
+
+    let membershipType = MembershipType.None;
+
+    for (const member of team.users) {
+        if (member.userId === user.id) {
+            membershipType = member.isLeader ? MembershipType.Admin : MembershipType.Member;
+        }
+    }
+
+    for (const member of team.organisation.users) {
+        if (member.userId === user.id) {
+            if (member.isAdmin) {
+                membershipType = MembershipType.Admin;
+            }
+        }
+    }
+
+    if (membershipType === MembershipType.None) {
+        notFound();
+    }
 
     return (
         <div className="space-y-3 px-10 pt-28">
             <div>
                 <div className="flex items-center gap-5">
-                    <strong className="text-4xl text-navy-300">4067X</strong>
-                    <strong className="text-3xl">Burnside X</strong>
+                    <strong className="text-4xl text-navy-300">{team.id}</strong>
+                    <strong className="text-3xl">{team.name}</strong>
                 </div>
-                <span className="text-xl text-slate-400">Team in <strong>Burnside Robotics</strong></span>
+                <span className="text-xl text-slate-400">Team in <strong>{team.organisation.name}</strong></span>
             </div>
             <div className="flex gap-5">
                 <div className="w-80">
