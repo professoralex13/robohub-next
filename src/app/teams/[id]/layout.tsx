@@ -5,6 +5,7 @@ import { notFound } from 'next/navigation';
 import { PropsWithChildren } from 'react';
 import { TeamNavigation } from '@/app/teams/[id]/TeamNavigation';
 import { TeamContextProvider } from '@/app/teams/[id]/TeamContext';
+import Link from 'next/link';
 
 export interface TeamPageProps<P = {}> { params: { id: string } & P }
 
@@ -57,7 +58,7 @@ const TeamRoot = protectedServerPage<PropsWithChildren<TeamPageProps>>(async ({ 
                     <strong className="text-4xl text-navy-300">{team.id}</strong>
                     <strong className="text-3xl">{team.name}</strong>
                 </div>
-                <span className="text-xl text-slate-400">Team in <strong>{team.organisation.name}</strong></span>
+                <span className="text-xl text-slate-400">Team in <Link href={`/organisations/${team.organisation.urlName}/overview`}><strong>{team.organisation.name}</strong></Link></span>
             </div>
             <div className="flex gap-5">
                 <TeamNavigation teamId={id} memberCount={team._count.users} />

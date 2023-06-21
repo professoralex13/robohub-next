@@ -88,6 +88,16 @@ export const organisationRouter = router({
                 },
             },
         });
+
+        // User cannot be in team but not organisation
+        await prisma.teamUser.deleteMany({
+            where: {
+                userId: user.id,
+                team: {
+                    organisationId: organisation.id,
+                },
+            },
+        });
     }),
 
     createTeam: publicProcedure.input(
