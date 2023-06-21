@@ -30,6 +30,9 @@ const AccountModal: FC<AccountModalProps> = ({ name, onSelect }) => {
                 <Link href="/organisations" className="modal-item" onClick={onSelect}>
                     Your organisations
                 </Link>
+                <Link href="/teams" className="modal-item" onClick={onSelect}>
+                    Your teams
+                </Link>
                 <Link href="/settings" className="modal-item" onClick={onSelect}>
                     Settings
                 </Link>

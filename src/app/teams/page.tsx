@@ -29,7 +29,7 @@ const TeamsList = protectedServerPage(async ({ user }) => {
                             href={`/teams/${team.id}/overview`}
                             className="flex cursor-pointer flex-row items-center justify-between rounded-lg p-2 duration-100 hover:bg-slate-700"
                         >
-                            <strong className="text-4xl">{team.name}</strong>
+                            <strong className="text-4xl">{team.id}</strong>
                             <span className="text-4xl">{team.name}</span>
 
                             <Settings size={30} className="hover:stroke-navy-300" />

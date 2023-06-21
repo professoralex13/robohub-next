@@ -10,7 +10,7 @@ interface TeamCardProps {
 }
 
 export const TeamCard: FC<TeamCardProps> = ({ team, memberCount, notebookCount }) => (
-    <Link href={`/teams/${team.id}`} className="card grow cursor-pointer space-y-5 p-5 duration-150 hover:border-navy-300">
+    <Link href={`/teams/${team.id}/overview`} className="card grow cursor-pointer space-y-5 p-5 duration-150 hover:border-navy-300">
         <div className="flex gap-5">
             <strong className="text-3xl">{team.id}</strong>
             <span className="text-3xl">{team.name}</span>
