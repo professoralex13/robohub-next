@@ -8,7 +8,7 @@ import { useRouter } from 'next/navigation';
 import { FC, useState } from 'react';
 import { Oval } from 'react-loading-icons';
 import Image from 'next/image';
-import { useConfirmation } from '@/app/contexts/ConfirmationContext';
+import { useConfirmation } from '@/components/ConfirmationDialog';
 import { useOrganisation } from '../OrganisationContext';
 
 interface UserCardProps {

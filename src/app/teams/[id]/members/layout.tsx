@@ -7,7 +7,7 @@ import { trpc } from '@/common/trpc';
 import { useTeam } from '@/app/teams/[id]/TeamContext';
 import { Oval } from 'react-loading-icons';
 import { User } from '@prisma/client';
-import { useConfirmation } from '@/app/contexts/ConfirmationContext';
+import { useConfirmation } from '@/components/ConfirmationDialog';
 import { useRouter } from 'next/navigation';
 import { MembershipType } from '@/common';
 

@@ -7,7 +7,7 @@ import { trpc } from '@/common/trpc';
 import { Oval } from 'react-loading-icons';
 import { Trash } from 'tabler-icons-react';
 import { useRouter } from 'next/navigation';
-import { useConfirmation } from '@/app/contexts/ConfirmationContext';
+import { useConfirmation } from '@/components/ConfirmationDialog';
 import { useTeam } from '../TeamContext';
 
 interface MemberRowProps {
