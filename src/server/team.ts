@@ -19,6 +19,14 @@ export const teamsRouter = router({
 
         const team = await getTeam(ctx, teamId, MembershipType.Admin);
 
+        // Checks that user is in same organisation as team
+        await prisma.organisationUser.findFirstOrThrow({
+            where: {
+                organisationId: team.organisationId,
+                userId,
+            },
+        });
+
         const user = await getUser(userId);
 
         await prisma.teamUser.create({
