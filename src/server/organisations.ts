@@ -2,6 +2,7 @@ import * as yup from 'yup';
 import { MembershipType } from '@/common';
 import { prisma } from '@/common/prisma';
 import { CreateOrganisationSchema, CreateTeamSchema } from '@/common/schema';
+import { TRPCError } from '@trpc/server';
 import { publicProcedure, router } from './trpc';
 import { getAuthenticatedUser, getOrganisation, getUser, transformUrlName } from './utils';
 
@@ -51,7 +52,7 @@ export const organisationRouter = router({
         });
     }),
 
-    addUser: publicProcedure.input(yup.object().shape({
+    inviteUser: publicProcedure.input(yup.object().shape({
         userId: yup.string().required(),
         organisationId: yup.number().required(),
     })).mutation(async ({ ctx, input }) => {
@@ -61,11 +62,76 @@ export const organisationRouter = router({
 
         const user = await getUser(userId);
 
-        await prisma.organisationUser.create({
+        await prisma.organisationInvite.create({
             data: {
                 isAdmin: false,
                 userId: user.id,
                 organisationId: organisation.id,
+                inviterId: getAuthenticatedUser(ctx).id,
+            },
+        });
+    }),
+
+    cancelInvite: publicProcedure.input(yup.object().shape({
+        userId: yup.string().required(),
+        organisationId: yup.number().required(),
+    })).mutation(async ({ ctx, input }) => {
+        const { userId, organisationId } = input;
+
+        const organisation = await getOrganisation(ctx, organisationId, MembershipType.Admin);
+
+        const user = await getUser(userId);
+
+        await prisma.organisationInvite.delete({
+            where: {
+                userId_organisationId: {
+                    userId: user.id,
+                    organisationId: organisation.id,
+                },
+            },
+        });
+    }),
+
+    respondToInvite: publicProcedure.input(yup.object().shape({
+        organisationId: yup.number().required(),
+        accept: yup.boolean().required(),
+    })).mutation(async ({ ctx, input }) => {
+        const { organisationId, accept } = input;
+        const user = getAuthenticatedUser(ctx);
+
+        const invitation = await prisma.organisationInvite.findUnique({
+            where: {
+                userId_organisationId: {
+                    userId: user.id,
+                    organisationId,
+                },
+            },
+        });
+
+        // Ensures that no one can force accept an invitation when none was sent
+        if (!invitation) {
+            throw new TRPCError({
+                code: 'NOT_FOUND',
+                message: `You have no invitations from the organisation with id: ${organisationId}`,
+            });
+        }
+
+        if (accept) {
+            await prisma.organisationUser.create({
+                data: {
+                    userId: user.id,
+                    organisationId,
+                    isAdmin: invitation.isAdmin,
+                },
+            });
+        }
+
+        await prisma.organisationInvite.delete({
+            where: {
+                userId_organisationId: {
+                    userId: user.id,
+                    organisationId,
+                },
             },
         });
     }),

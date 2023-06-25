@@ -3,6 +3,7 @@ import { MotionDiv } from '@/components/Motion';
 import { prisma } from '@/common/prisma';
 import Link from 'next/link';
 import { protectedServerPage } from '@/components/protectedServerPage';
+import { InvitationRow } from '@/app/organisations/InvitationRow';
 
 const OrganisationList = protectedServerPage(async ({ user }) => {
     const organisations = await prisma.organisation.findMany({
@@ -12,6 +13,15 @@ const OrganisationList = protectedServerPage(async ({ user }) => {
                     user,
                 },
             },
+        },
+    });
+
+    const invitations = await prisma.organisationInvite.findMany({
+        where: {
+            user,
+        },
+        include: {
+            organisation: true,
         },
     });
 
@@ -38,13 +48,16 @@ const OrganisationList = protectedServerPage(async ({ user }) => {
                         {organisations.length === 0 && (
                             <span className="text-center text-3xl">You are not a member of any organisations</span>
                         )}
+                        {invitations.length !== 0 && (
+                            <span className="border-t-[1px] border-slate-500 pt-5 text-center text-3xl text-slate-400">Invitations</span>
+                        )}
+                        {invitations.map((invite) => (
+                            <InvitationRow invitation={invite} />
+                        ))}
                     </div>
                 </div>
 
-                <div className="flex flex-row gap-24">
-                    <Link href="/organisations/create" className="button">Create Organisation</Link>
-                    <Link href="/organisations/join" className="button">Join Organisation</Link>
-                </div>
+                <Link href="/organisations/create" className="button">Create Organisation</Link>
             </MotionDiv>
         </div>
     );

@@ -4,6 +4,7 @@ import { prisma } from '@/common/prisma';
 import { publicProcedure, router } from './trpc';
 
 export const usersRouter = router({
+    // TODO: Refactor into specific functions for each query use i.e. team member add, organisation invite
     query: publicProcedure.input(yup.object().shape({
         query: yup.string(),
 
@@ -39,6 +40,15 @@ export const usersRouter = router({
                     some: requiredOrganisation ? {
                         organisation: {
                             name: requiredOrganisation,
+                        },
+                    } : undefined,
+                },
+                organisationInvites: {
+                    every: ignoredOrganisation ? {
+                        NOT: {
+                            organisation: {
+                                name: ignoredOrganisation,
+                            },
                         },
                     } : undefined,
                 },

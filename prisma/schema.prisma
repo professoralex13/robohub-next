@@ -38,17 +38,19 @@ model Session {
 }
 
 model User {
-    id              String             @id @default(cuid())
-    name            String
-    email           String             @unique
-    emailVerified   DateTime?
-    image           String
-    notebookEntries NoteBookEntry[]
-    blogs           Blog[]
-    organisations   OrganisationUser[]
-    teams           TeamUser[]
-    Account         Account[]
-    Session         Session[]
+    id                  String               @id @default(cuid())
+    name                String
+    email               String               @unique
+    emailVerified       DateTime?
+    image               String
+    notebookEntries     NoteBookEntry[]
+    blogs               Blog[]
+    organisations       OrganisationUser[]
+    teams               TeamUser[]
+    organisationInvites OrganisationInvite[] @relation("invitee")
+    sentInvitations     OrganisationInvite[] @relation("inviter")
+    Account             Account[]
+    Session             Session[]
 }
 
 model VerificationToken {
@@ -71,10 +73,24 @@ model OrganisationUser {
     @@id([userId, organisationId])
 }
 
+model OrganisationInvite {
+    userId         String
+    organisationId Int
+    inviterId      String
+
+    user         User         @relation("invitee", fields: [userId], references: [id])
+    organisation Organisation @relation(fields: [organisationId], references: [id])
+    inviter      User         @relation("inviter", fields: [inviterId], references: [id])
+
+    isAdmin Boolean
+
+    @@id([userId, organisationId])
+}
+
 model Organisation {
-    id          Int                @id @default(autoincrement())
-    name        String             @unique
-    urlName     String             @unique
+    id          Int                  @id @default(autoincrement())
+    name        String               @unique
+    urlName     String               @unique
     description String
     location    String
     teams       Team[]
@@ -83,6 +99,7 @@ model Organisation {
     customParts Part[]
     blogs       Blog[]
     users       OrganisationUser[]
+    userInvites OrganisationInvite[]
 }
 
 model TeamUser {

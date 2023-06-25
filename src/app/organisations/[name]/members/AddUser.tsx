@@ -17,7 +17,7 @@ interface UserCardProps {
 }
 
 const UserCard: FC<UserCardProps> = ({ user, onSelect }) => {
-    const { mutateAsync, isLoading } = trpc.react.organisation.addUser.useMutation();
+    const { mutateAsync, isLoading } = trpc.react.organisation.inviteUser.useMutation();
 
     const organisation = useOrganisation();
 
@@ -29,7 +29,7 @@ const UserCard: FC<UserCardProps> = ({ user, onSelect }) => {
         <button
             className="group relative h-max w-full cursor-pointer"
             onClick={!isLoading ? (async () => {
-                if (await confirm(<span>Add <strong>{user.name}</strong> to <strong>{organisation.name}</strong></span>)) {
+                if (await confirm(<span>Invite <strong>{user.name}</strong> to <strong>{organisation.name}</strong></span>)) {
                     await mutateAsync({
                         userId: user.id,
                         organisationId: organisation.id,
@@ -59,7 +59,7 @@ const UserCard: FC<UserCardProps> = ({ user, onSelect }) => {
                     isLoading ? 'opacity-100' : 'group-hover:opacity-100',
                 )}
             >
-                {isLoading ? <Oval /> : <span className="text-lg">Add to Organisation</span>}
+                {isLoading ? <Oval /> : <span className="text-lg">Invite to Organisation</span>}
             </div>
         </button>
     );
