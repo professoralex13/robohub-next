@@ -1,23 +1,9 @@
 import { TRPCError } from '@trpc/server';
 import { MembershipType } from '@/common';
-import { prisma } from '@/common/prisma';
 import { Context } from './context';
 
-export function getAuthenticatedUser(ctx: Context) {
-    const user = ctx.session?.user;
-
-    if (!user) {
-        throw new TRPCError({
-            code: 'FORBIDDEN',
-            message: 'You must be signed in to use this API',
-        });
-    }
-
-    return user;
-}
-
-export async function getUser(id: string) {
-    const user = await prisma.user.findUnique({
+export async function getUser(ctx: Context, id: string) {
+    const user = await ctx.database.user.findUnique({
         where: {
             id,
         },
@@ -33,8 +19,8 @@ export async function getUser(id: string) {
     return user;
 }
 
-export async function getOrganisation(context: Context, id: number, minimumMembership: MembershipType = MembershipType.Member) {
-    const organisation = await prisma.organisation.findUnique({
+export async function getOrganisation(ctx: Context, id: number, minimumMembership: MembershipType = MembershipType.Member) {
+    const organisation = await ctx.database.organisation.findUnique({
         where: {
             id,
         },
@@ -51,12 +37,12 @@ export async function getOrganisation(context: Context, id: number, minimumMembe
     }
 
     if (minimumMembership > MembershipType.None) {
-        const user = getAuthenticatedUser(context);
+        const user = ctx.session?.user;
 
         let membershipType = MembershipType.None;
 
         for (const member of organisation.users) {
-            if (member.userId === user.id) {
+            if (member.userId === user?.id) {
                 if (member.isAdmin) {
                     membershipType = MembershipType.Admin;
                 } else {
@@ -76,8 +62,8 @@ export async function getOrganisation(context: Context, id: number, minimumMembe
     return organisation;
 }
 
-export async function getTeam(context: Context, id: string, minimumMembership: MembershipType = MembershipType.Member) {
-    const team = await prisma.team.findUnique({
+export async function getTeam(ctx: Context, id: string, minimumMembership: MembershipType = MembershipType.Member) {
+    const team = await ctx.database.team.findUnique({
         where: {
             id,
         },
@@ -99,12 +85,12 @@ export async function getTeam(context: Context, id: string, minimumMembership: M
     }
 
     if (minimumMembership > MembershipType.None) {
-        const user = getAuthenticatedUser(context);
+        const user = ctx.session?.user;
 
         let membershipType = MembershipType.None;
 
         for (const member of team.users) {
-            if (member.userId === user.id) {
+            if (member.userId === user?.id) {
                 if (member.isLeader) {
                     membershipType = MembershipType.Admin;
                 } else {
@@ -114,7 +100,7 @@ export async function getTeam(context: Context, id: string, minimumMembership: M
         }
 
         for (const member of team.organisation.users) {
-            if (member.userId === user.id) {
+            if (member.userId === user?.id) {
                 if (member.isAdmin) {
                     membershipType = MembershipType.Admin;
                 }

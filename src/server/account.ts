@@ -1,7 +1,6 @@
-import { getAuthenticatedUser } from '@/server/utils';
 import { prisma } from '@/common/prisma';
 import { PUBLIC_BUCKET_URL, env } from '@/common/environment';
-import { publicProcedure, router } from './trpc';
+import { privateProcedure, router } from './trpc';
 
 export const accountRouter = router({
     /**
@@ -24,8 +23,8 @@ export const accountRouter = router({
      *     body,
      * });
      */
-    uploadAvatarPresignedUrl: publicProcedure.mutation(async ({ ctx }) => {
-        const user = getAuthenticatedUser(ctx);
+    uploadAvatarPresignedUrl: privateProcedure.mutation(async ({ ctx }) => {
+        const { user } = ctx.session;
 
         const key = `user-avatars/${user.id}`;
 
@@ -43,7 +42,7 @@ export const accountRouter = router({
         const presignedPost = await ctx.storage.presignedPostPolicy(policy);
 
         // Update database with expected url for uploaded image
-        await prisma.user.update({
+        await ctx.database.user.update({
             where: {
                 id: user.id,
             },
