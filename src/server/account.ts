@@ -1,36 +1,34 @@
 import { getAuthenticatedUser } from '@/server/utils';
 import { prisma } from '@/common/prisma';
-import { ContentDeliveryRoot } from '@/common/environment';
+import { PUBLIC_BUCKET_URL, env } from '@/common/environment';
 import { publicProcedure, router } from './trpc';
 
 export const accountRouter = router({
     uploadAvatarPresignedUrl: publicProcedure.mutation(async ({ ctx }) => {
         const user = getAuthenticatedUser(ctx);
 
-        const key = `user-avatars/${user.id}/${crypto.randomUUID()}`;
+        const key = `user-avatars/${user.id}`;
 
-        await ctx.publicBucket.deleteFiles({
-            prefix: `user-avatars/${user.id}`,
-        });
+        await ctx.storage.removeObject(env.PUBLIC_BUCKET_NAME, key);
 
-        const file = ctx.publicBucket.file(key);
+        const policy = ctx.storage.newPostPolicy();
 
-        const url = await file.generateSignedPostPolicyV4({
-            expires: Date.now() + 60 * 1000,
-            conditions: [
-                ['content-length-range', 0, 4000000],
-            ],
-        });
+        policy.setBucket(env.PUBLIC_BUCKET_NAME);
+        policy.setKey(key);
+        policy.setExpires(new Date(Date.now() + 60 * 1000));
+        policy.setContentLengthRange(0, 4000000);
+
+        const presignedPost = await ctx.storage.presignedPostPolicy(policy);
 
         await prisma.user.update({
             where: {
                 id: user.id,
             },
             data: {
-                image: ContentDeliveryRoot + key,
+                image: `${PUBLIC_BUCKET_URL}/${key}`,
             },
         });
 
-        return url;
+        return presignedPost;
     }),
 });

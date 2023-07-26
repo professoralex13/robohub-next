@@ -22,18 +22,18 @@ const Settings = protectedClientPage(({ user }) => {
                         return;
                     }
 
-                    const [{ url, fields }] = await createPresignedUrl();
+                    const { postURL, formData } = await createPresignedUrl();
 
-                    const formData = new FormData();
+                    const body = new FormData();
 
-                    Object.entries({ ...fields, file }).forEach(([key, value]) => {
-                        formData.append(key, value);
+                    Object.entries({ ...formData, file }).forEach(([key, value]) => {
+                        body.append(key, value);
                     });
 
                     // This throws a CORS error but still works for some reason
-                    await fetch(url, {
+                    await fetch(postURL, {
                         method: 'POST',
-                        body: formData,
+                        body,
                     }).catch(() => {});
 
                     router.refresh();
