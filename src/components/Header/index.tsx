@@ -14,7 +14,7 @@ export const Header = async () => {
         <header className="absolute top-0 z-20 flex w-full items-center justify-between gap-16 border-b-4 border-navy-300 p-5">
             <Link href="/" className="mr-auto text-5xl text-navy-300">robohub</Link>
             {session ? <AccountSection user={session.user} /> : (
-                <NavLink href="/sign-in">Sign In</NavLink>
+                <NavLink href="/sign-in">Sign in</NavLink>
             )}
             <Search className="duration-100 hover:stroke-navy-300" />
         </header>
