@@ -6,8 +6,7 @@ import { signOut } from 'next-auth/react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { FC, useState } from 'react';
-import Image from 'next/image';
-import caretIcon from './Caret.svg';
+import { ChevronUp } from 'tabler-icons-react';
 import { ModalWrapper } from '../ModalWrapper';
 
 interface AccountModalProps {
@@ -58,8 +57,8 @@ export const AccountSection = ({ user }: { user: User }) => {
                 {/* Cannot use next/image because it needs a specified width and height which is unknown */}
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img src={user.image} alt="profile" className="h-12 w-12 rounded-full" />
-                <m.div animate={{ rotate: modalOpen ? 0 : 180 }} className="text-center">
-                    ^
+                <m.div animate={{ rotateX: modalOpen ? 0 : 180 }} className="text-center">
+                    <ChevronUp />
                 </m.div>
             </button>
             <ModalWrapper open={modalOpen} onClose={() => setModalOpen(false)}>
