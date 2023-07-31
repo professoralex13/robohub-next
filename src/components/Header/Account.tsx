@@ -58,7 +58,9 @@ export const AccountSection = ({ user }: { user: User }) => {
                 {/* Cannot use next/image because it needs a specified width and height which is unknown */}
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img src={user.image} alt="profile" className="h-12 w-12 rounded-full" />
-                <Image src={caretIcon} alt="caret" />
+                <m.div animate={{ rotate: modalOpen ? 0 : 180 }} className="text-center">
+                    ^
+                </m.div>
             </button>
             <ModalWrapper open={modalOpen} onClose={() => setModalOpen(false)}>
                 <AccountModal onSelect={() => setModalOpen(false)} name={user.name} />
