@@ -5,10 +5,6 @@ const nextConfig = {
         typedRoutes: true,
         serverActions: true,
     },
-    typescript: {
-        // fixes async component build issue
-        ignoreBuildErrors: true,
-    },
     images: {
         remotePatterns: [
             {

@@ -1,32 +1,39 @@
 'use client';
 
 import { MembershipType } from '@/common';
-import { FC, ReactNode, useState } from 'react';
+import { FC, PropsWithChildren, useState } from 'react';
 import { ModalWrapper } from '@/components/ModalWrapper';
 import clsx from 'clsx';
+import { useRouter, useSelectedLayoutSegment } from 'next/navigation';
 import { useOrganisation } from '../OrganisationContext';
 import AddUserModal from './AddUser';
+import { OrganisationPageProps } from '../layout';
 
-interface MembersProps {
-    members: ReactNode;
-    invitations: ReactNode;
-}
-
-const Members: FC<MembersProps> = ({ members, invitations }) => {
+const Members: FC<PropsWithChildren<OrganisationPageProps>> = ({ children, params }) => {
     const organisation = useOrganisation();
 
     const [inviteDialogOpen, setInviteDialogOpen] = useState(false);
 
-    const [invitationsOpen, setInvitationsOpen] = useState(false);
+    const invitationsOpen = useSelectedLayoutSegment() === 'invitations';
+
+    const router = useRouter();
 
     return (
         <div className="grid grid-cols-[14rem_min-content_auto_max-content] grid-rows-[3rem_max-content] gap-3">
             {/* View Selection Card */}
             <div className="card flex h-min flex-col">
-                <button className={clsx('modal-item rounded-t-md text-left', !invitationsOpen && 'bg-slate-700')} type="button" onClick={() => setInvitationsOpen(false)}>
+                <button
+                    className={clsx('modal-item rounded-t-md text-left', !invitationsOpen && 'bg-slate-700')}
+                    type="button"
+                    onClick={() => router.push(`/organisations/${params.name}/members`)}
+                >
                     Members
                 </button>
-                <button className={clsx('modal-item rounded-b-md text-left', invitationsOpen && 'bg-slate-700')} type="button" onClick={() => setInvitationsOpen(true)}>
+                <button
+                    className={clsx('modal-item rounded-b-md text-left', invitationsOpen && 'bg-slate-700')}
+                    type="button"
+                    onClick={() => router.push(`/organisations/${params.name}/members/invitations`)}
+                >
                     Invitations
                 </button>
             </div>
@@ -46,7 +53,7 @@ const Members: FC<MembersProps> = ({ members, invitations }) => {
 
             {/* Card showing list of all members in organisation */}
             <div className="col-span-3 col-start-2 row-start-2">
-                {invitationsOpen ? invitations : members}
+                {children}
             </div>
         </div>
     );

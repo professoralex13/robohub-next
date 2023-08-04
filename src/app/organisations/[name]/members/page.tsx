@@ -1,6 +1,6 @@
 import { getOrganisation } from '@/app/organisations/[name]/utils';
 import { MemberRow } from './MemberRow';
-import { OrganisationPageProps } from '../../layout';
+import { OrganisationPageProps } from '../layout';
 
 const MembersList = async ({ params }: OrganisationPageProps) => {
     const members = await getOrganisation(params).users({

@@ -34,14 +34,14 @@
     "superjson": "^1.12.3",
     "tabler-icons-react": "^1.56.0",
     "tailwindcss": "3.3.2",
-    "typescript": "5.0.4",
+    "typescript": "^5.1.6",
     "yup": "^1.1.1"
   },
   "devDependencies": {
     "@synaptic-simulations/eslint-config": "^1.0.2",
     "@types/node": "20.0.0",
-    "@types/react": "18.2.5",
-    "@types/react-dom": "18.2.3",
+    "@types/react": "^18.2.18",
+    "@types/react-dom": "^18.2.7",
     "eslint": "8.39.0",
     "eslint-config-next": "13.4.0",
     "eslint-plugin-tailwindcss": "^3.11.0"

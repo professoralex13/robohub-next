@@ -8,7 +8,7 @@ import { Oval } from 'react-loading-icons';
 import { Trash } from 'tabler-icons-react';
 import { useRouter } from 'next/navigation';
 import { useConfirmation } from '@/components/ConfirmationDialog';
-import { useOrganisation } from '../../OrganisationContext';
+import { useOrganisation } from '../OrganisationContext';
 
 interface MemberRowProps {
     member: OrganisationUser & {
