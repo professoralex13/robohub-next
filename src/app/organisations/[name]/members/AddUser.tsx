@@ -16,6 +16,12 @@ interface UserCardProps {
     onSelect: () => void;
 }
 
+/**
+ * Card in list of found users. Allows selection with confirmation dialog
+ * @param user - Data about user for card to show
+ * @param onSelect - Callback for when user confirms they wish to invite this user
+ * @constructor
+ */
 const UserCard: FC<UserCardProps> = ({ user, onSelect }) => {
     const { mutateAsync, isLoading } = trpc.react.organisation.inviteUser.useMutation();
 
@@ -65,6 +71,10 @@ const UserCard: FC<UserCardProps> = ({ user, onSelect }) => {
     );
 };
 
+/**
+ * Modal allowing user to search for users in database and invite them to organisation
+ * @param onClose - Callback for when modal is closed
+ */
 const AddUserModal: FC<{ onClose: () => void }> = ({ onClose }) => {
     const [query, setQuery] = useState('');
 

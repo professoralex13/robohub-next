@@ -17,6 +17,9 @@ interface CreateTeamDialogProps {
     organisation: Organisation;
 }
 
+/**
+ * Dialog popup allowing user to create a team in the current organisation
+ */
 export const CreateTeamDialog: FC<CreateTeamDialogProps> = ({ organisation }) => {
     const openDialog = useDialogContext();
 
@@ -36,6 +39,7 @@ export const CreateTeamDialog: FC<CreateTeamDialogProps> = ({ organisation }) =>
             <Formik
                 initialValues={{ id: '', name: '' }}
                 onSubmit={async ({ id, name }, { setFieldError }) => {
+                    // Fetch status of id and name use in parallel
                     const [idTaken, nameTaken] = await Promise.all([
                         trpc.client.teams.idTaken.query(id),
                         trpc.client.organisation.teamNameTaken.query({ organisationId: organisation.id, teamName: name }),
@@ -49,6 +53,7 @@ export const CreateTeamDialog: FC<CreateTeamDialogProps> = ({ organisation }) =>
                         setFieldError('name', 'Name Taken in organisation');
                     }
 
+                    // If either id or name are taken, we return from onSubmit as to not make the request to create the org
                     if (idTaken || nameTaken) {
                         return;
                     }
@@ -77,7 +82,6 @@ export const CreateTeamDialog: FC<CreateTeamDialogProps> = ({ organisation }) =>
                     </Form>
                 )}
             </Formik>
-
         </m.div>
     );
 };

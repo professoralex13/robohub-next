@@ -9,6 +9,11 @@ interface TeamCardProps {
     notebookCount: number;
 }
 
+/**
+ * Component for a card in the list of teams in an organisation
+ *
+ * Each card is a clickable link to the respective teams own page
+ */
 export const TeamCard: FC<TeamCardProps> = ({ team, memberCount, notebookCount }) => (
     <Link href={`/teams/${team.id}/overview`} className="card grow cursor-pointer space-y-5 p-5 duration-150 hover:border-navy-300">
         <div className="flex gap-5">

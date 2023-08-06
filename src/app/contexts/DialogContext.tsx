@@ -1,3 +1,9 @@
+/**
+ * Dialog Context handles the showing of dialogs ontop of the page with entry, exit animations.
+ *
+ * Also handles automatic exiting when clicking outside of the dialog
+ */
+
 'use client';
 
 import { AnimatePresence, m } from 'framer-motion';

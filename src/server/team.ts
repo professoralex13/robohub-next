@@ -5,12 +5,23 @@ import { MembershipType } from '@/common';
 import { publicProcedure, router } from './trpc';
 
 export const teamsRouter = router({
+    /**
+     * @param teamId
+     * @returns whether or not the `teamId` is taken by an existing team
+     */
     idTaken: publicProcedure.input(yup.string().required()).query(async ({ input }) => {
         const team = await prisma.team.findFirst({ where: { id: input } });
 
         return !!team;
     }),
 
+    /**
+     * Adds a user from the given teams organisation, to the given team
+     *
+     * The logged in user **must** be an admin of the given team's organisation, or be a leader of the given team to use this method
+     * @param userId - id of the user in the given team's organisation to add
+     * @param teamId - id of the team to add the given user to
+     */
     addUser: publicProcedure.input(yup.object().shape({
         userId: yup.string().required(),
         teamId: yup.string().required(),
@@ -38,6 +49,13 @@ export const teamsRouter = router({
         });
     }),
 
+    /**
+     * Removes a given user from a given team
+     *
+     * The logged in user **must** be an admin of the given team's organisation, or be a leader of the given team to use this method
+     * @param userId - id of the user in the team, to remove from the team
+     * @param teamId - id of the team to remove the user from
+     */
     removeUser: publicProcedure.input(yup.object().shape({
         userId: yup.string().required(),
         teamId: yup.string().required(),

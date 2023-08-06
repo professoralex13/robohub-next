@@ -13,6 +13,11 @@ interface InvitationRowProps {
     };
 }
 
+/**
+ * Client component for showing pending invitation for the user to an organisation.
+ *
+ * Handles the accepting or declining of the invitation with a form.
+ */
 export const InvitationRow: FC<InvitationRowProps> = ({ invitation }) => {
     const { mutateAsync, isLoading } = trpc.react.organisation.respondToInvite.useMutation();
 

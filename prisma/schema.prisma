@@ -10,6 +10,7 @@ datasource db {
     shadowDatabaseUrl = env("POSTGRES_URL_NON_POOLING") // used for migrations}
 }
 
+// Account represents a connection between a user and an OAuth provider
 model Account {
     id                String  @id @default(cuid())
     userId            String
@@ -29,6 +30,7 @@ model Account {
     @@unique([provider, providerAccountId])
 }
 
+// Stores data about each logged in session for a user
 model Session {
     id           String   @id @default(cuid())
     sessionToken String   @unique
@@ -37,12 +39,17 @@ model Session {
     user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
+// Stores data about a user. Users are differentiated by email, so OAuth connections are linked by the affiliated email
 model User {
-    id                  String               @id @default(cuid())
-    name                String
-    email               String               @unique
-    emailVerified       DateTime?
-    image               String
+    id            String    @id @default(cuid())
+    // The Users username
+    name          String
+    email         String    @unique
+    // Date and Time when the email adress was verified, if it was verified
+    emailVerified DateTime?
+    // Url of the users profile picture
+    image         String
+
     notebookEntries     NoteBookEntry[]
     blogs               Blog[]
     organisations       OrganisationUser[]
@@ -61,6 +68,7 @@ model VerificationToken {
     @@unique([identifier, token])
 }
 
+// Represents someones membership within an organisation
 model OrganisationUser {
     userId         String
     organisationId Int
@@ -73,6 +81,7 @@ model OrganisationUser {
     @@id([userId, organisationId])
 }
 
+// Represents a pending invitation between an inviter in an organisation, and a user who is being invited
 model OrganisationInvite {
     userId         String
     organisationId Int
@@ -90,6 +99,7 @@ model OrganisationInvite {
 model Organisation {
     id          Int                  @id @default(autoincrement())
     name        String               @unique
+    // Url name represents the sanitized name that will be used for routing
     urlName     String               @unique
     description String
     location    String
@@ -102,6 +112,7 @@ model Organisation {
     userInvites OrganisationInvite[]
 }
 
+// Represents someones membership within a team
 model TeamUser {
     userId String
     teamId String

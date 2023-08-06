@@ -1,3 +1,7 @@
+/**
+ * Set of cards for showing states of interaction
+ */
+
 import { FC, PropsWithChildren } from 'react';
 import { AlertCircle, AlertTriangle } from 'tabler-icons-react';
 

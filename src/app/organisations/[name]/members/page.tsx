@@ -2,6 +2,9 @@ import { getOrganisation } from '@/app/organisations/[name]/utils';
 import { MemberRow } from './MemberRow';
 import { OrganisationPageProps } from '../layout';
 
+/**
+ * Component for the list of current members in an organisation
+ */
 const MembersList = async ({ params }: OrganisationPageProps) => {
     const members = await getOrganisation(params).users({
         include: {

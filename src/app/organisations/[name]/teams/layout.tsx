@@ -6,6 +6,9 @@ import { useOrganisation } from '@/app/organisations/[name]/OrganisationContext'
 import { useDialogContext } from '@/app/contexts/DialogContext';
 import { CreateTeamDialog } from '@/app/organisations/[name]/teams/CreateTeamDialog';
 
+/**
+ * Layout of Teams tab of organisation page
+ */
 const Teams: FC<PropsWithChildren> = ({ children }) => {
     const organisation = useOrganisation();
 

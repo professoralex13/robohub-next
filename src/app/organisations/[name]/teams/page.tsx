@@ -3,6 +3,11 @@ import { TeamCard } from '@/app/organisations/[name]/teams/TeamCard';
 import { WarningBox } from '@/components/Notification';
 import { getOrganisation } from '@/app/organisations/[name]/utils';
 
+/**
+ * Renders list of teams in the current organisation.
+ *
+ * This is expected to be inserted as a child of the teams layout.
+ */
 const TeamsList = async ({ params }: OrganisationPageProps) => {
     const teams = await getOrganisation(params).teams({
         include: {
@@ -21,7 +26,7 @@ const TeamsList = async ({ params }: OrganisationPageProps) => {
                 <WarningBox>
                     There are no teams in this organisation
                 </WarningBox>
-            ) }
+            )}
             {teams.map((team) => (
                 <TeamCard
                     team={team}

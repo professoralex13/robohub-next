@@ -4,6 +4,11 @@ import { MotionDiv } from '@/components/Motion';
 import Link from 'next/link';
 import { Settings } from 'tabler-icons-react';
 
+/**
+ * Page for showing list of teams that the current user is a member of.
+ *
+ * Being a member or admin of an organisation does not mean you are in every team in an organisation.
+ */
 const TeamsList = protectedServerPage(async ({ user }) => {
     const teams = await prisma.team.findMany({
         where: {

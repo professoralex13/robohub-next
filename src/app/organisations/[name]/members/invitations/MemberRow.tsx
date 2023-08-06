@@ -17,6 +17,9 @@ interface MemberRowProps {
     };
 }
 
+/**
+ * A component for a row in the list of pending invitations to an organisation
+ */
 export const MemberRow = protectedClientPage<MemberRowProps>(({ member, user: loggedInUser }) => {
     const { user, isAdmin, inviter } = member;
 

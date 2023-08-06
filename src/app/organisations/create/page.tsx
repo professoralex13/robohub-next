@@ -11,9 +11,8 @@ import { useRouter } from 'next/navigation';
 import { CreateOrganisationSchema } from '@/common/schema';
 
 /**
- * Schema for validating the SignUp page fields
+ * Page allowing current user to create a new organisation
  */
-
 const CreateOrganisation = protectedClientPage(() => {
     const router = useRouter();
 

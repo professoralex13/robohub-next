@@ -6,8 +6,23 @@ import { MembershipType } from '@/common';
 import { OrganisationHeader } from './OrganisationHeader';
 import { OrganisationContextProvider } from './OrganisationContext';
 
-export interface OrganisationPageProps<P = {}> { params: { name: string } & P }
+/**
+ * Generic page props for organisation tabs which types the url param for organisation name
+ */
+export interface OrganisationPageProps<P = {}> {
+    params: {
+        /**
+         * The name of the currently navigated organisation
+         */
+        name: string;
+    } & P;
+}
 
+/**
+ * Root layout of the organisation page, renders the header above the current sub page.
+ *
+ * Handles validating that the current logged user is a member of the respective navigated organisation before rendering any sub pages.
+ */
 const OrganisationRoot = protectedServerPage<PropsWithChildren<OrganisationPageProps>>(async ({ params: { name }, children, user }) => {
     const organisation = await prisma.organisation.findFirst({
         where: { urlName: name },

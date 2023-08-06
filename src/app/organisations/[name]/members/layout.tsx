@@ -9,6 +9,13 @@ import { useOrganisation } from '../OrganisationContext';
 import AddUserModal from './AddUser';
 import { OrganisationPageProps } from '../layout';
 
+/**
+ * Layout component for the members tab of an organisation
+ *
+ * This layout uses the [parallel routing](https://nextjs.org/docs/app/building-your-application/routing/parallel-routes) pattern to switch between showing invitations, and members.
+ *
+ * We need to do this instead of just putting `<MembersList>` and `<PendingMembersList>` in because the invitations and members lists must be server components
+ */
 const Members: FC<PropsWithChildren<OrganisationPageProps>> = ({ children, params }) => {
     const organisation = useOrganisation();
 

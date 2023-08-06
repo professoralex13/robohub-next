@@ -3,6 +3,9 @@ import { TeamPageProps } from '@/app/teams/[id]/layout';
 import { getTeam } from '@/app/teams/[id]/utils';
 import { MemberRow } from '@/app/teams/[id]/members/MemberRow';
 
+/**
+ * Component for list of members currently in the team
+ */
 const Members = protectedServerPage<TeamPageProps>(async ({ params }) => {
     const members = await getTeam(params).users({
         include: {

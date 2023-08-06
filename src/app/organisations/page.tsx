@@ -5,7 +5,11 @@ import Link from 'next/link';
 import { protectedServerPage } from '@/components/protectedServerPage';
 import { InvitationRow } from '@/app/organisations/InvitationRow';
 
+/**
+ * Page showing the list of organisations that the current logged in user is a member of, plus pending invites to other organisations.
+ */
 const OrganisationList = protectedServerPage(async ({ user }) => {
+    // Gets list of organisations which have OrganisationMembers with the logged user affiliate
     const organisations = await prisma.organisation.findMany({
         where: {
             users: {
@@ -16,6 +20,7 @@ const OrganisationList = protectedServerPage(async ({ user }) => {
         },
     });
 
+    // Gets list of invitations where the affiliated user is the logged in uesr
     const invitations = await prisma.organisationInvite.findMany({
         where: {
             user,

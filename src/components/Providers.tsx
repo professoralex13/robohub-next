@@ -11,6 +11,10 @@ interface ProvidersProps {
     session: Session;
 }
 
+/**
+ * Providers must be called in a client component otherwise they will not work.
+ * This Component wraps all necessary providers in a client file.
+ */
 const Providers: FC<PropsWithChildren<ProvidersProps>> = ({ session, children }) => (
     <SessionProvider session={session}>
         <LazyMotion features={domMax}>

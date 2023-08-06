@@ -15,6 +15,9 @@ interface SignInPageProps {
     };
 }
 
+/**
+ * Signin page which allows user to sign-in/sign-up (depending on whether the user has already) using one of three OAuth providers
+ */
 const SignIn: FC<SignInPageProps> = ({ searchParams }) => {
     const { data } = useSession();
     const router = useRouter();

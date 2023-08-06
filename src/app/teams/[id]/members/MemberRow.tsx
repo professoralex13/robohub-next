@@ -16,6 +16,9 @@ interface MemberRowProps {
     };
 }
 
+/**
+ * Component for row in list of users currently part of the team
+ */
 export const MemberRow = protectedClientPage<MemberRowProps>(({ member }) => {
     const { user, isLeader } = member;
 

@@ -4,6 +4,9 @@ import { FC } from 'react';
 import { Field, FieldAttributes, useField } from 'formik';
 import clsx from 'clsx';
 
+/**
+ * Text field component which handles showing of errors from Formik context
+ */
 export const TextField: FC<FieldAttributes<any>> = ({ type = 'text', ...props }) => {
     const [field, meta] = useField(props);
 

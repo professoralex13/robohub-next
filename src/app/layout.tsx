@@ -29,6 +29,7 @@ const sans = localFont({
         },
     ],
 });
+
 const RootLayout: FC<PropsWithChildren<{ session: Session }>> = ({ session, children }) => (
     <html lang="en" className={sans.className}>
         <body>

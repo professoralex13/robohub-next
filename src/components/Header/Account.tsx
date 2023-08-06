@@ -14,6 +14,9 @@ interface AccountModalProps {
     onSelect: () => void;
 }
 
+/**
+ * Component for the dropdown menu affiliated with clicking the current logged in user pfp and chevron
+ */
 const AccountModal: FC<AccountModalProps> = ({ name, onSelect }) => {
     const router = useRouter();
 
@@ -44,6 +47,9 @@ const AccountModal: FC<AccountModalProps> = ({ name, onSelect }) => {
     );
 };
 
+/**
+ * Component for the section of the header concerned with showing the current logged in user
+ */
 export const AccountSection = ({ user }: { user: User }) => {
     const [modalOpen, setModalOpen] = useState(false);
 

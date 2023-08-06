@@ -5,6 +5,9 @@ import { nextAuthOptions } from '@/common/auth';
 import { env } from '@/common/environment';
 import { Client } from 'minio';
 
+/**
+ * Gets neccesary context information for trpc procedures
+ */
 export async function createContext(ctx: CreateNextContextOptions) {
     const { req, res } = ctx;
 

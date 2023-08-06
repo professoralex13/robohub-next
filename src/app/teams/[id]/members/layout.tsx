@@ -15,6 +15,11 @@ interface AddUserRowProps {
     user: User;
 }
 
+/**
+ * Row to show as part of list of queried users from the team's organiastion.
+ *
+ * Allows user to click on row to add user to the team
+ */
 const AddUserRow: FC<AddUserRowProps> = ({ user }) => {
     const { mutateAsync, isLoading } = trpc.react.teams.addUser.useMutation();
 
@@ -49,6 +54,13 @@ const AddUserRow: FC<AddUserRowProps> = ({ user }) => {
     );
 };
 
+/**
+ * Layout for members page of team.
+ *
+ * Contains slot for server rendered list of members,
+ * and if the user is an admin of the team's organisation, or leader of the team,
+ * a search box for finding and adding members from the organisation, to the team.
+ */
 const MembersLayout = protectedClientPage<PropsWithChildren<TeamPageProps>>(({ children }) => {
     const [query, setQuery] = useState('');
 

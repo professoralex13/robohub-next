@@ -8,10 +8,21 @@ import Link from 'next/link';
 import { m } from 'framer-motion';
 
 interface NavigationLinkProps<T extends string> extends PropsWithChildren {
+    /**
+     * Tabler icons symbol to display as part of link
+     */
     symbol: Icon;
+    /**
+     * Optional number data affiliated with link
+     */
     count?: number;
-    children: string;
+    /**
+     * ***Absolute*** link for respective page
+     *
+     * Must be absolute otherwise the link cannot correctly validate which page is in use
+     */
     url: Route<T>;
+    children: string;
 }
 
 const NavigationLink = <T extends string>({ symbol: Symbol, count, children, url }: NavigationLinkProps<T>) => {
@@ -19,6 +30,7 @@ const NavigationLink = <T extends string>({ symbol: Symbol, count, children, url
 
     return (
         <Link href={url} prefetch className="relative flex cursor-pointer items-center gap-3 rounded-md p-2 duration-200 hover:bg-navy-600">
+            {/* Uses framer motion layoutId to smoothly transition sideline between links based on which is active */}
             {isActive && <m.div layoutId="organisation-header-sideline" className="absolute inset-y-2 -left-1 w-0.5 rounded-full bg-white group-hover:bg-navy-300" />}
             <Symbol size={20} />
             <span className="mr-auto">{children}</span>
@@ -32,6 +44,9 @@ interface TeamNavigationProps {
     memberCount: number;
 }
 
+/**
+ * Component for sidebar navigation to be shown in teams layout
+ */
 export const TeamNavigation: FC<TeamNavigationProps> = ({ teamId, memberCount }) => (
     <div className="w-80">
         <NavigationLink url={`/teams/${teamId}/overview`} symbol={Dashboard}>

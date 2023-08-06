@@ -5,6 +5,26 @@ import { publicProcedure, router } from './trpc';
 
 export const usersRouter = router({
     // TODO: Refactor into specific functions for each query use i.e. team member add, organisation invite
+    // TODO: Improve parameter names to specify whether they are id or name based
+    /**
+     * Queries a list of users based on a query string and filters
+     *
+     * @param query - Substring to query for inside email address or name of users (case insensitive)
+     * @param ignoredOrganisation - Name of organisation to not return users from
+     * @param requiredorganisation - Name of organisation to only return users from
+     * @param ignoredTeam - Id of team to not return users from
+     * @param requiredTeam - Id of team to only return users from
+     *
+     * @param take - number of users to query
+     * @param skip - number of users to skip
+     *
+     * @example
+     * const users = trpc.users.query({
+     *     query: inputState,
+     *     requiredOrganisation: organisation.name,
+     *     ignoredTeam: team.id,
+     * }); // List of users eligible to be added to a team
+     */
     query: publicProcedure.input(yup.object().shape({
         query: yup.string(),
 

@@ -6,6 +6,9 @@ interface ModalWrapperProps {
     onClose: () => void;
 }
 
+/**
+ * Wraps modals to handle automatic closing when clicked outside behavior and and framer presence when closing
+ */
 export const ModalWrapper: FC<PropsWithChildren<ModalWrapperProps>> = ({ open, onClose, children }) => {
     useEffect(() => {
         const callback = () => {

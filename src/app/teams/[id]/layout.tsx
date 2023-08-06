@@ -9,6 +9,13 @@ import Link from 'next/link';
 
 export interface TeamPageProps<P = {}> { params: { id: string } & P }
 
+/**
+ * Layout for currently routed team.
+ *
+ * Handles authenticating that current user has rights to view this team, otherwise, 404.
+ *
+ * Renders the side navbar for the team, and then the child page slot.
+ */
 const TeamRoot = protectedServerPage<PropsWithChildren<TeamPageProps>>(async ({ params: { id }, children, user }) => {
     const team = await prisma.team.findFirst({
         where: { id },

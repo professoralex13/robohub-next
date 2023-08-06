@@ -7,6 +7,9 @@ import { trpc } from '@/common/trpc';
 import { useRouter } from 'next/navigation';
 import { Oval } from 'react-loading-icons';
 
+/**
+ * Page for the current logged in users personal preferences.
+ */
 const Settings = protectedClientPage(({ user }) => {
     const { mutateAsync: createPresignedUrl } = trpc.react.account.uploadAvatarPresignedUrl.useMutation();
 
@@ -22,19 +25,23 @@ const Settings = protectedClientPage(({ user }) => {
                         return;
                     }
 
+                    // This function calls the createPresignedUrl endpoint to get a signed url
+                    // Allowing this image to be uploaded to the s3 bucket for storage
+
                     const { postURL, formData } = await createPresignedUrl();
 
                     const body = new FormData();
 
+                    // Create formData with data returned from presignedUrl endpoint, and the file to upload
                     Object.entries({ ...formData, file }).forEach(([key, value]) => {
                         body.append(key, value);
                     });
 
-                    // This throws a CORS error but still works for some reason
+                    // ? This throws a CORS error but still works for some reason
                     await fetch(postURL, {
                         method: 'POST',
                         body,
-                    }).catch(() => {});
+                    }).catch(() => { });
 
                     router.refresh();
                     router.push('/');

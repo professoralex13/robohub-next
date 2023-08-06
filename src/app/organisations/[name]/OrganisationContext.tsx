@@ -1,5 +1,9 @@
 'use client';
 
+/**
+ * Context for passing current organisation data down to child client components/pages
+ */
+
 import { MembershipType } from '@/common';
 import { Organisation } from '@prisma/client';
 import { FC, PropsWithChildren, createContext, useContext } from 'react';
