@@ -4,6 +4,8 @@ FROM node:18
 
 WORKDIR /app
 
+LABEL io.portainer.accesscontrol.teams=development
+
 COPY src ./src
 COPY prisma ./prisma
 COPY public ./public
