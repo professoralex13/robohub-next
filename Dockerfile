@@ -4,8 +4,6 @@ FROM node:18
 
 WORKDIR /app
 
-LABEL io.portainer.accesscontrol.teams=development
-
 COPY src ./src
 COPY prisma ./prisma
 COPY public ./public
@@ -24,6 +22,8 @@ ENV CDN_ACCESS_KEY=none
 ENV CDN_SECRET_KEY=none
 ENV PUBLIC_BUCKET_NAME=none
 RUN npm run build:production
+
+LABEL io.portainer.accesscontrol.teams=developers
 
 COPY . .
 
