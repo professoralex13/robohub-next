@@ -18,7 +18,7 @@ const Teams: FC<PropsWithChildren> = ({ children }) => {
         <div className="flex flex-col gap-3">
             <div className="flex justify-between">
                 {/* Input field for filtering the names of teams */}
-                <input placeholder="Find Teams" type="text" className="row-span-1" />
+                <input placeholder="Find Teams" type="text" className="row-span-1 w-32" />
                 {organisation.membershipType >= MembershipType.Admin && (
                     <div className="relative col-start-4">
                         <button type="button" className="button" onClick={() => openDialog(<CreateTeamDialog organisation={organisation} />)}>

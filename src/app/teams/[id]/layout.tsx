@@ -59,7 +59,7 @@ const TeamRoot = protectedServerPage<PropsWithChildren<TeamPageProps>>(async ({ 
     }
 
     return (
-        <div className="space-y-3 px-10 pt-28">
+        <div className="space-y-3 p-4">
             <div>
                 <div className="flex items-center gap-5">
                     <strong className="text-4xl text-navy-300">{team.id}</strong>

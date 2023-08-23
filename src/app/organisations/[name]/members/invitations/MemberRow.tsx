@@ -39,11 +39,11 @@ export const MemberRow = protectedClientPage<MemberRowProps>(({ member, user: lo
         >
             <input type="checkbox" className="m-auto" />
             <span className="text-xl text-slate-400">{user.name}</span>
-            <span className="text-lg text-slate-400">Invited by {inviter.name}</span>
-            {isAdmin && <span className="text-xl text-slate-400">Admin</span>}
+            <span className="text-lg text-slate-400 max-md:hidden">Invited by {inviter.name}</span>
+            {isAdmin && <span className="text-xl text-slate-400 max-md:hidden">Admin</span>}
             {showRemoveButton && (isLoading ? <Oval className="my-auto ml-auto h-7" /> : (
                 <X
-                    className="my-auto ml-auto cursor-pointer stroke-slate-400 duration-200 hover:stroke-red-500"
+                    className="col-start-4 my-auto ml-auto cursor-pointer stroke-slate-400 duration-200 hover:stroke-red-500"
                     onClick={async () => {
                         if (await confirm(<span>Cancel <strong>{user.name}'s</strong> invitation</span>)) {
                             await mutateAsync({

@@ -30,7 +30,7 @@ const SignIn: FC<SignInPageProps> = ({ searchParams }) => {
     return (
         <div className="overflow-hidden">
             <m.div
-                className="flex h-screen flex-col items-center justify-center gap-4"
+                className="flex flex-col items-center justify-center gap-4 pt-20"
                 initial={{ opacity: 0, y: 100 }}
                 animate={{ opacity: 1, y: 0 }}
             >

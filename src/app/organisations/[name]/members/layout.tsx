@@ -25,8 +25,10 @@ const Members: FC<PropsWithChildren<OrganisationPageProps>> = ({ children, param
 
     const router = useRouter();
 
+    const isAdmin = organisation.membershipType >= MembershipType.Admin;
+
     return (
-        <div className="grid grid-cols-[14rem_min-content_auto_max-content] grid-rows-[3rem_max-content] gap-3">
+        <div className="grid grid-cols-[7rem_min-content_auto_max-content] grid-rows-[3rem_max-content] gap-3">
             {/* View Selection Card */}
             <div className="card flex h-min flex-col">
                 <button
@@ -46,8 +48,8 @@ const Members: FC<PropsWithChildren<OrganisationPageProps>> = ({ children, param
             </div>
 
             {/* Input field for filtering the names of members */}
-            <input placeholder="Search" type="text" className="row-span-1" />
-            {organisation.membershipType >= MembershipType.Admin && (
+            <input placeholder="Search" type="text" className={clsx('row-span-1', isAdmin && 'max-sm:hidden')} />
+            {isAdmin && (
                 <div className="relative col-start-4">
                     <button type="button" className="button" onClick={() => setInviteDialogOpen(true)}>
                         Invite Members

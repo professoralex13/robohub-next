@@ -85,7 +85,7 @@ const AddUserModal: FC<{ onClose: () => void }> = ({ onClose }) => {
 
     return (
         <m.div
-            className="card absolute right-0 top-14 w-96 space-y-3 p-5"
+            className="card absolute right-0 top-14 w-72 space-y-3 p-5"
             initial={{ clipPath: 'inset(0 0 100% 0)' }}
             animate={{ clipPath: 'inset(0)' }}
             exit={{ clipPath: 'inset(0 0 100% 0)' }}

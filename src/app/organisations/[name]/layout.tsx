@@ -58,7 +58,7 @@ const OrganisationRoot = protectedServerPage<PropsWithChildren<OrganisationPageP
     }
 
     return (
-        <div className="space-y-2 p-2 pt-28">
+        <div className="space-y-2 p-3">
             <OrganisationHeader organisation={organisation} memberCount={organisation._count.users} teamCount={organisation._count.teams} />
 
             <OrganisationContextProvider value={{ ...organisation, membershipType }}>

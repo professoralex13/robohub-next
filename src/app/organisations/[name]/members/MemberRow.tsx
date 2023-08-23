@@ -38,7 +38,7 @@ export const MemberRow = protectedClientPage<MemberRowProps>(({ member, user: lo
         >
             <input type="checkbox" className="m-auto" />
             <span className="text-xl text-slate-400">{user.name}</span>
-            {isAdmin && <span className="text-xl text-slate-400">Admin</span>}
+            {isAdmin && <span className="text-xl text-slate-400 max-sm:hidden">Admin</span>}
             {showRemoveButton && (isLoading ? <Oval className="my-auto ml-auto h-7" /> : (
                 <Trash
                     className="my-auto ml-auto cursor-pointer stroke-slate-400 duration-200 hover:stroke-red-500"

@@ -21,16 +21,18 @@
     @apply rounded-md bg-navy-800 border-slate-500/50 border-2
   }
 
-  input[type=text], input[type=password] {
-    @apply border-2 rounded-md bg-transparent px-2 py-3 text-xl duration-100 border-slate-500/50
+  input[type=text],
+  input[type=password] {
+    @apply border-2 rounded-md bg-transparent p-2 text-sm duration-100 border-slate-500/50
   }
 
-  input[type=text].error, input[type=password].error  {
+  input[type=text].error,
+  input[type=password].error {
     @apply border-red-400
   }
 
   .button {
-    @apply bg-navy-300 text-navy-900 rounded-md px-4 py-3 text-xl duration-200 !important
+    @apply bg-navy-300 text-navy-900 rounded-md px-3 py-2 text-lg duration-200 !important
   }
 
   .button:hover {

@@ -32,10 +32,10 @@ export const CreateTeamDialog: FC<CreateTeamDialogProps> = ({ organisation }) =>
             initial={{ y: 400 }}
             animate={{ y: 0 }}
             exit={{ y: 400 }}
-            className="card absolute flex flex-col items-center gap-5 px-20 py-10"
+            className="card absolute flex flex-col items-center gap-5 p-7"
         >
             <X className="absolute right-3 top-3 cursor-pointer duration-200 hover:stroke-red-500" size={30} onClick={() => openDialog(null)} />
-            <span className="text-4xl">Create Team for <strong>{organisation.name}</strong></span>
+            <span className="text-center text-4xl">Create Team for <strong>{organisation.name}</strong></span>
             <Formik
                 initialValues={{ id: '', name: '' }}
                 onSubmit={async ({ id, name }, { setFieldError }) => {

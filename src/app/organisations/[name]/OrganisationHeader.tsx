@@ -39,11 +39,11 @@ const HeaderLink = <T extends string>({ symbol: Symbol, count, children, url }: 
     return (
         <Link href={url} prefetch className="group relative flex h-10 cursor-pointer items-center gap-2 pb-1 hover:border-navy-300">
             <Symbol size={25} className="group-hover:stroke-navy-300" />
-            <span className="text-xl group-hover:text-navy-300">{children}</span>
-            {count !== undefined && <span className="rounded-full border-2 px-1 text-lg group-hover:border-navy-300 group-hover:text-navy-300">{count}</span>}
+            <span className="text-lg group-hover:text-navy-300 max-lg:hidden">{children}</span>
+            {count !== undefined && <span className="rounded-full border-2 px-1 text-sm group-hover:border-navy-300 group-hover:text-navy-300 max-lg:hidden">{count}</span>}
 
             {/* Uses framer motion layoutId to smoothly transition underline between links based on which is active */}
-            {isActive && <m.div layoutId="organisation-header-underline" className="absolute inset-x-0 -bottom-1 h-0.5 rounded-full bg-white group-hover:bg-navy-300" />}
+            {isActive && <m.div layoutId="organisation-header-underline" className="absolute inset-x-0 bottom-1 h-0.5 rounded-full bg-white group-hover:bg-navy-300" />}
         </Link>
     );
 };
@@ -58,21 +58,23 @@ interface OrganisationHeaderProps {
  * Component for header to be displayed above organisation sub pages
  */
 export const OrganisationHeader: FC<OrganisationHeaderProps> = ({ organisation, memberCount, teamCount }) => (
-    <div className="card grid auto-cols-max grid-rows-2 gap-3 p-2">
-        <Image src={teamLogo} className="row-span-2 h-28 w-28" alt="organisation logo" />
+    <div className="card flex gap-3 p-2">
+        <Image src={teamLogo} className="h-20 w-20" alt="organisation logo" />
 
-        <div className="col-start-2 mt-auto space-x-10">
-            <strong className="text-4xl">{organisation.name}</strong>
-            <span className="text-3xl">{organisation.location}</span>
-        </div>
+        <div className="flex flex-col justify-between gap-3">
+            <div className="col-start-2 flex flex-row items-center gap-5">
+                <strong className="text-2xl">{organisation.name}</strong>
+                <span className="text-xl max-lg:hidden">{organisation.location}</span>
+            </div>
 
-        <div className="flex flex-row items-center gap-10 gap-y-5">
-            <HeaderLink url={`/organisations/${organisation.urlName}/overview`} symbol={Dashboard}>Overview</HeaderLink>
-            <HeaderLink url={`/organisations/${organisation.urlName}/blogs`} symbol={Notes}>Blogs</HeaderLink>
-            <HeaderLink url={`/organisations/${organisation.urlName}/parts`} symbol={List}>Parts</HeaderLink>
-            <HeaderLink url={`/organisations/${organisation.urlName}/members`} symbol={User} count={memberCount}>Members</HeaderLink>
-            <HeaderLink url={`/organisations/${organisation.urlName}/teams`} symbol={Users} count={teamCount}>Teams</HeaderLink>
-            <HeaderLink url={`/organisations/${organisation.urlName}/settings`} symbol={Settings}>Settings</HeaderLink>
+            <div className="flex flex-row items-center gap-10 gap-y-5 max-lg:gap-2">
+                <HeaderLink url={`/organisations/${organisation.urlName}/overview`} symbol={Dashboard}>Overview</HeaderLink>
+                <HeaderLink url={`/organisations/${organisation.urlName}/blogs`} symbol={Notes}>Blogs</HeaderLink>
+                <HeaderLink url={`/organisations/${organisation.urlName}/parts`} symbol={List}>Parts</HeaderLink>
+                <HeaderLink url={`/organisations/${organisation.urlName}/members`} symbol={User} count={memberCount}>Members</HeaderLink>
+                <HeaderLink url={`/organisations/${organisation.urlName}/teams`} symbol={Users} count={teamCount}>Teams</HeaderLink>
+                <HeaderLink url={`/organisations/${organisation.urlName}/settings`} symbol={Settings}>Settings</HeaderLink>
+            </div>
         </div>
     </div>
 );

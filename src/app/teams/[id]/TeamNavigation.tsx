@@ -33,7 +33,7 @@ const NavigationLink = <T extends string>({ symbol: Symbol, count, children, url
             {/* Uses framer motion layoutId to smoothly transition sideline between links based on which is active */}
             {isActive && <m.div layoutId="organisation-header-sideline" className="absolute inset-y-2 -left-1 w-0.5 rounded-full bg-white group-hover:bg-navy-300" />}
             <Symbol size={20} />
-            <span className="mr-auto">{children}</span>
+            <span className="max-sm:hidden">{children}</span>
             {count !== undefined && <span className="rounded-full border-2 px-1 text-sm group-hover:border-navy-300 group-hover:text-navy-300">{count}</span>}
         </Link>
     );
@@ -48,7 +48,7 @@ interface TeamNavigationProps {
  * Component for sidebar navigation to be shown in teams layout
  */
 export const TeamNavigation: FC<TeamNavigationProps> = ({ teamId, memberCount }) => (
-    <div className="w-80">
+    <div>
         <NavigationLink url={`/teams/${teamId}/overview`} symbol={Dashboard}>
             Overview
         </NavigationLink>

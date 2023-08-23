@@ -1,7 +1,7 @@
 import { Oval } from 'react-loading-icons';
 
 const Loading = () => (
-    <div className="h-screen w-screen">
+    <div className="h-2/3 w-screen">
         <Oval className="absolute inset-0 m-auto" />
     </div>
 );

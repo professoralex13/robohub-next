@@ -18,6 +18,13 @@ const OrganisationList = protectedServerPage(async ({ user }) => {
                 },
             },
         },
+        include: {
+            users: {
+                where: {
+                    user,
+                },
+            },
+        },
     });
 
     // Gets list of invitations where the affiliated user is the logged in uesr
@@ -33,33 +40,37 @@ const OrganisationList = protectedServerPage(async ({ user }) => {
     return (
         <div className="overflow-hidden">
             <MotionDiv
-                className="flex h-screen flex-col items-center justify-between overflow-hidden p-5 pt-36"
+                className="flex flex-col items-center gap-10 overflow-hidden p-5"
                 initial={{ opacity: 0, y: 100 }}
                 animate={{ opacity: 1, y: 0 }}
             >
-                <div className="flex flex-col items-center gap-16">
-                    <span className="text-6xl">Your Organisations</span>
-                    <div className="card flex w-[33vw] flex-col gap-5 p-5">
-                        {organisations.map((organisation) => (
-                            <Link
-                                href={`/organisations/${organisation.urlName}/overview`}
-                                className="flex cursor-pointer flex-row items-center justify-between rounded-lg p-2 duration-100 hover:bg-slate-700"
-                            >
-                                <span className="text-4xl">{organisation.name}</span>
+                <span className="text-2xl">Your Organisations</span>
+                <div className="card flex flex-col gap-3 p-3">
+                    {organisations.map((organisation) => (
+                        <Link
+                            href={`/organisations/${organisation.urlName}/overview`}
+                            className="flex cursor-pointer flex-row items-center justify-between gap-3 rounded-lg p-2 duration-100 hover:bg-slate-700"
+                        >
+                            <span className="break-words text-2xl">{organisation.name}</span>
 
-                                <Settings size={30} className="hover:stroke-navy-300" />
-                            </Link>
-                        ))}
-                        {organisations.length === 0 && (
-                            <span className="text-center text-3xl">You are not a member of any organisations</span>
-                        )}
-                        {invitations.length !== 0 && (
-                            <span className="border-t-[1px] border-slate-500 pt-5 text-center text-3xl text-slate-400">Invitations</span>
-                        )}
-                        {invitations.map((invite) => (
-                            <InvitationRow invitation={invite} />
-                        ))}
-                    </div>
+                            {organisation.users[0].isAdmin && (
+                                <Link
+                                    href={`/organisations/${organisation.urlName}/settings`}
+                                >
+                                    <Settings size={20} className="hover:stroke-navy-300" />
+                                </Link>
+                            )}
+                        </Link>
+                    ))}
+                    {organisations.length === 0 && (
+                        <span className="text-center text-2xl">You are not a member of any organisations</span>
+                    )}
+                    {invitations.length !== 0 && (
+                        <span className="ml-2 border-t-[1px] border-slate-500 pt-5 text-left text-2xl text-slate-400">Invitations</span>
+                    )}
+                    {invitations.map((invite) => (
+                        <InvitationRow invitation={invite} />
+                    ))}
                 </div>
 
                 <Link href="/organisations/create" className="button">Create Organisation</Link>

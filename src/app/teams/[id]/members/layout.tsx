@@ -69,8 +69,8 @@ const MembersLayout = protectedClientPage<PropsWithChildren<TeamPageProps>>(({ c
     const { data } = trpc.react.users.query.useQuery({ query, take: 10, ignoredTeam: team.id, requiredOrganisation: team.organisation.name }, { cacheTime: 0 });
 
     return (
-        <div className="flex w-1/3 flex-col gap-3">
-            <h1 className="border-b-[1px] border-slate-600 pb-3 text-3xl">Members</h1>
+        <div className="flex flex-col gap-3">
+            <h1 className="border-b-[1px] border-slate-600 pb-3 text-2xl">Members</h1>
             {children}
             <div className="border-b-[1px] border-slate-600" />
             {team.membershipType >= MembershipType.Admin && (

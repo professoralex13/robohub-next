@@ -1,7 +1,6 @@
 'use server';
 
 import Link from 'next/link';
-import { Search } from 'tabler-icons-react';
 import { getServerSession } from 'next-auth';
 import { nextAuthOptions } from '@/common/auth';
 import { NavLink } from './NavLink';
@@ -11,12 +10,11 @@ export const Header = async () => {
     const session = await getServerSession(nextAuthOptions);
 
     return (
-        <header className="absolute top-0 z-20 flex w-full items-center justify-between gap-16 border-b-4 border-navy-300 p-5">
-            <Link href="/" className="mr-auto text-5xl text-navy-300">robohub</Link>
+        <header className="sticky top-0 z-20 flex h-16 w-full items-center justify-between gap-16 border-b-2 border-navy-300 p-2 px-5">
+            <Link href="/" className="mr-auto text-2xl text-navy-300">robohub</Link>
             {session ? <AccountSection user={session.user} /> : (
                 <NavLink href="/sign-in">Sign in</NavLink>
             )}
-            <Search className="duration-100 hover:stroke-navy-300" />
         </header>
     );
 };

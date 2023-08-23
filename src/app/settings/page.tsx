@@ -16,8 +16,8 @@ const Settings = protectedClientPage(({ user }) => {
     const router = useRouter();
 
     return (
-        <div className="mt-28 flex flex-col items-center gap-5">
-            <span className="text-5xl">User Settings</span>
+        <div className="flex flex-col items-center gap-5 pt-10">
+            <span className="text-3xl">User Settings</span>
             <Formik<{ file: File | undefined }>
                 initialValues={{ file: undefined }}
                 onSubmit={async ({ file }) => {

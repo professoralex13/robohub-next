@@ -21,11 +21,11 @@ const CreateOrganisation = protectedClientPage(() => {
     return (
         <div className="overflow-hidden">
             <m.div
-                className="flex h-screen flex-col items-center justify-center gap-16"
+                className="flex flex-col items-center justify-center gap-10 p-5"
                 initial={{ opacity: 0, y: 100 }}
                 animate={{ opacity: 1, y: 0 }}
             >
-                <span className="text-6xl">Create Organisation</span>
+                <span className="text-2xl">Create Organisation</span>
                 <Formik
                     initialValues={{ name: '', description: '', location: '' }}
                     onSubmit={async ({ name, description, location }, { setFieldError }) => {
