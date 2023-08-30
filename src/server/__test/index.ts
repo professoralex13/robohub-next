@@ -48,7 +48,7 @@ export async function authServerTestEnvironment() {
 
     const caller = appRouter.createCaller(context);
 
-    return [caller, prisma, context.session.user] as const;
+    return [caller, prisma, context.session.user, context] as const;
 }
 
 export function createUser(prisma: PrismaClient): Promise<User> {
