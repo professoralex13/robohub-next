@@ -9,7 +9,8 @@
     "start": "next start",
     "start:production": "prisma db push && next start",
     "lint": "next lint",
-    "postinstall": "prisma generate"
+    "postinstall": "prisma generate",
+    "test": "jest"
   },
   "dependencies": {
     "@next-auth/prisma-adapter": "^1.0.6",
@@ -34,16 +35,22 @@
     "superjson": "^1.12.3",
     "tabler-icons-react": "^1.56.0",
     "tailwindcss": "3.3.2",
+    "ts-jest": "^29.1.1",
     "typescript": "^5.1.6",
     "yup": "^1.1.1"
   },
   "devDependencies": {
     "@synaptic-simulations/eslint-config": "^1.0.2",
+    "@types/jest": "^29.5.3",
     "@types/node": "20.0.0",
     "@types/react": "^18.2.18",
     "@types/react-dom": "^18.2.7",
     "eslint": "8.39.0",
     "eslint-config-next": "13.4.0",
-    "eslint-plugin-tailwindcss": "^3.11.0"
+    "eslint-plugin-tailwindcss": "^3.11.0",
+    "jest": "^29.6.1",
+    "jest-mock-extended": "^3.0.4",
+    "prisma-mock": "^0.8.2",
+    "ts-node": "^10.9.1"
   }
 }

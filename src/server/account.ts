@@ -1,4 +1,3 @@
-import { prisma } from '@/common/prisma';
 import { PUBLIC_BUCKET_URL, env } from '@/common/environment';
 import { privateProcedure, router } from './trpc';
 
