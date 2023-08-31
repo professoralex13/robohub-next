@@ -1,0 +1,32 @@
+name: pr
+on: 
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: variables
+        run: |
+          touch .env
+          echo GOOGLE_CLIENT_ID=not_needed >> .env
+          echo GOOGLE_CLIENT_SECRET=not_needed >> .env
+          echo DISCORD_CLIENT_ID=not_needed >> .env
+          echo DISCORD_CLIENT_SECRET=not_needed >> .env
+          echo GH_CLIENT_ID=not_needed >> .env
+          echo GH_CLIENT_SECRET=not_needed >> .env
+          echo CDN_URL=not_needed >> .env
+          echo CDN_ACCESS_KEY=not_needed >> .env
+          echo CDN_SECRET_KEY=not_needed >> .env
+          echo PUBLIC_BUCKET_NAME=not_needed >> .env
+      - name: install
+        run: npm install
+      - name: lint
+        run: npm run lint
+      - name: build
+        run: npm run build:production # Must be production otherwise it will push to database before starting
+      - name: test
+        run: npm run test

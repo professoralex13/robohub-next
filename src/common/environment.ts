@@ -10,8 +10,8 @@ const EnvironmentSchema = yup.object().shape({
     GOOGLE_CLIENT_SECRET: yup.string().required(),
     DISCORD_CLIENT_ID: yup.string().required(),
     DISCORD_CLIENT_SECRET: yup.string().required(),
-    GITHUB_CLIENT_ID: yup.string().required(),
-    GITHUB_CLIENT_SECRET: yup.string().required(),
+    GH_CLIENT_ID: yup.string().required(),
+    GH_CLIENT_SECRET: yup.string().required(),
 
     CDN_URL: yup.string().required(),
     CDN_ACCESS_KEY: yup.string().required(),
