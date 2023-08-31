@@ -8,7 +8,8 @@ export const CreateOrganisationSchema = yup.object().shape({
     name: yup
         .string()
         .min(3)
-        .matches(PreUrlCompliant, 'Name Must not have any special characters')
+        .max(30)
+        .matches(PreUrlCompliant, 'Must not contain special characters')
         .required(),
     description: yup
         .string()
@@ -18,7 +19,7 @@ export const CreateOrganisationSchema = yup.object().shape({
     location: yup
         .string()
         .min(2)
-        .max(20)
+        .max(30)
         .required(),
 });
 
@@ -29,7 +30,7 @@ export const CreateTeamSchema = yup.object().shape({
         .required(),
     name: yup
         .string()
-        .matches(PreUrlCompliant, 'Name Must not have any special characters')
+        .matches(PreUrlCompliant, 'Must not contain special characters')
         .min(3)
         .max(20)
         .required(),
