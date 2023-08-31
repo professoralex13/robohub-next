@@ -1,6 +1,5 @@
 import * as yup from 'yup';
 
-import { prisma } from '@/common/prisma';
 import { publicProcedure, router } from './trpc';
 
 export const usersRouter = router({
@@ -35,7 +34,7 @@ export const usersRouter = router({
 
         take: yup.number().required(),
         skip: yup.number().optional(),
-    })).query(async ({ input }) => {
+    })).query(async ({ ctx, input }) => {
         const {
             query,
             ignoredOrganisation,
@@ -46,7 +45,7 @@ export const usersRouter = router({
             skip,
         } = input;
 
-        return prisma.user.findMany({
+        return ctx.database.user.findMany({
             where: {
                 OR: [{ email: { contains: query, mode: 'insensitive' } }, { name: { contains: query, mode: 'insensitive' } }],
                 organisations: {

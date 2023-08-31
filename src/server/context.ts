@@ -4,6 +4,7 @@ import { getServerSession } from 'next-auth';
 import { nextAuthOptions } from '@/common/auth';
 import { env } from '@/common/environment';
 import { Client } from 'minio';
+import { prisma } from '@/common/prisma';
 
 /**
  * Gets neccesary context information for trpc procedures
@@ -25,6 +26,7 @@ export async function createContext(ctx: CreateNextContextOptions) {
         res,
         session,
         storage,
+        database: prisma,
     };
 }
 

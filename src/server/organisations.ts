@@ -1,19 +1,18 @@
 import * as yup from 'yup';
 import { MembershipType } from '@/common';
-import { prisma } from '@/common/prisma';
 import { CreateOrganisationSchema, CreateTeamSchema } from '@/common/schema';
 import { TRPCError } from '@trpc/server';
-import { publicProcedure, router } from './trpc';
-import { getAuthenticatedUser, getOrganisation, getUser, transformUrlName } from './utils';
+import { privateProcedure, publicProcedure, router } from './trpc';
+import { getOrganisation, getUser, transformUrlName } from './utils';
 
 export const organisationRouter = router({
     /**
      * @param organisationName
      * @returns whether or not the `organisationName` is taken by another existing organiastion
      */
-    nameTaken: publicProcedure.input(yup.string().required()).query(async ({ input }) => {
+    nameTaken: publicProcedure.input(yup.string().required()).query(async ({ ctx, input }) => {
         const urlName = transformUrlName(input);
-        const organisation = await prisma.organisation.findFirst({ where: { OR: [{ name: input }, { urlName }] } });
+        const organisation = await ctx.database.organisation.findFirst({ where: { OR: [{ name: input }, { urlName }] } });
 
         return !!organisation;
     }),
@@ -26,10 +25,10 @@ export const organisationRouter = router({
     teamNameTaken: publicProcedure.input(yup.object().shape({
         teamName: yup.string().required(),
         organisationId: yup.number().required(),
-    })).query(async ({ input }) => {
+    })).query(async ({ ctx, input }) => {
         const { teamName, organisationId } = input;
 
-        const team = await prisma.team.findFirst({
+        const team = await ctx.database.team.findFirst({
             where: {
                 name: teamName,
                 organisation: {
@@ -44,11 +43,12 @@ export const organisationRouter = router({
     /**
      * Creates a new organisation using provided information, with the current logged in user as an admin
      */
-    create: publicProcedure.input(CreateOrganisationSchema).mutation(async ({ ctx, input }) => {
-        const user = getAuthenticatedUser(ctx);
+    create: privateProcedure.input(CreateOrganisationSchema).mutation(async ({ ctx, input }) => {
+        const { user } = ctx.session;
+
         const { name, location, description } = input;
 
-        return prisma.organisation.create({
+        return ctx.database.organisation.create({
             data: {
                 name,
                 urlName: transformUrlName(name),
@@ -71,7 +71,7 @@ export const organisationRouter = router({
      * @param userId - id of the user to invite
      * @param organisationId - id of the organisation to invite the user to
      */
-    inviteUser: publicProcedure.input(yup.object().shape({
+    inviteUser: privateProcedure.input(yup.object().shape({
         userId: yup.string().required(),
         organisationId: yup.number().required(),
     })).mutation(async ({ ctx, input }) => {
@@ -79,14 +79,14 @@ export const organisationRouter = router({
 
         const organisation = await getOrganisation(ctx, organisationId, MembershipType.Admin);
 
-        const user = await getUser(userId);
+        const user = await getUser(ctx, userId);
 
-        await prisma.organisationInvite.create({
+        await ctx.database.organisationInvite.create({
             data: {
                 isAdmin: false,
                 userId: user.id,
                 organisationId: organisation.id,
-                inviterId: getAuthenticatedUser(ctx).id,
+                inviterId: ctx.session.user.id,
             },
         });
     }),
@@ -98,7 +98,7 @@ export const organisationRouter = router({
      * @param userId - id of the user to cancel the invitation to
      * @param organisationId - id of the organisation to cancel the invitation from
      */
-    cancelInvite: publicProcedure.input(yup.object().shape({
+    cancelInvite: privateProcedure.input(yup.object().shape({
         userId: yup.string().required(),
         organisationId: yup.number().required(),
     })).mutation(async ({ ctx, input }) => {
@@ -106,9 +106,9 @@ export const organisationRouter = router({
 
         const organisation = await getOrganisation(ctx, organisationId, MembershipType.Admin);
 
-        const user = await getUser(userId);
+        const user = await getUser(ctx, userId);
 
-        await prisma.organisationInvite.delete({
+        await ctx.database.organisationInvite.delete({
             where: {
                 userId_organisationId: {
                     userId: user.id,
@@ -126,14 +126,14 @@ export const organisationRouter = router({
      * @param organisationId - id of the organisation to respond to any invite from
      * @param accept - boolean for whether the user is **accepting** the invite
      */
-    respondToInvite: publicProcedure.input(yup.object().shape({
+    respondToInvite: privateProcedure.input(yup.object().shape({
         organisationId: yup.number().required(),
         accept: yup.boolean().required(),
     })).mutation(async ({ ctx, input }) => {
         const { organisationId, accept } = input;
-        const user = getAuthenticatedUser(ctx);
+        const { user } = ctx.session;
 
-        const invitation = await prisma.organisationInvite.findUnique({
+        const invitation = await ctx.database.organisationInvite.findUnique({
             where: {
                 userId_organisationId: {
                     userId: user.id,
@@ -151,7 +151,7 @@ export const organisationRouter = router({
         }
 
         if (accept) {
-            await prisma.organisationUser.create({
+            await ctx.database.organisationUser.create({
                 data: {
                     userId: user.id,
                     organisationId,
@@ -160,7 +160,7 @@ export const organisationRouter = router({
             });
         }
 
-        await prisma.organisationInvite.delete({
+        await ctx.database.organisationInvite.delete({
             where: {
                 userId_organisationId: {
                     userId: user.id,
@@ -177,7 +177,7 @@ export const organisationRouter = router({
      * @param userId - id of the user to remove from the organisation
      * @param organisationId - id of the organisation to remove the user from
      */
-    removeUser: publicProcedure.input(yup.object().shape({
+    removeUser: privateProcedure.input(yup.object().shape({
         userId: yup.string().required(),
         organisationId: yup.number().required(),
     })).mutation(async ({ ctx, input }) => {
@@ -185,9 +185,9 @@ export const organisationRouter = router({
 
         const organisation = await getOrganisation(ctx, organisationId, MembershipType.Admin);
 
-        const user = await getUser(userId);
+        const user = await getUser(ctx, userId);
 
-        await prisma.organisationUser.delete({
+        await ctx.database.organisationUser.delete({
             where: {
                 userId_organisationId: {
                     userId: user.id,
@@ -197,7 +197,7 @@ export const organisationRouter = router({
         });
 
         // User cannot be in team but not organisation
-        await prisma.teamUser.deleteMany({
+        await ctx.database.teamUser.deleteMany({
             where: {
                 userId: user.id,
                 team: {
@@ -212,14 +212,14 @@ export const organisationRouter = router({
      *
      * @param organisationId - id of the organisation to create the new team within
      */
-    createTeam: publicProcedure.input(
+    createTeam: privateProcedure.input(
         CreateTeamSchema.concat(yup.object().shape({ organisationId: yup.number().required() })),
     ).mutation(async ({ ctx, input }) => {
         const { organisationId, id, name } = input;
 
         const organisation = await getOrganisation(ctx, organisationId, MembershipType.Admin);
 
-        return prisma.team.create({
+        return ctx.database.team.create({
             data: {
                 id,
                 name,
