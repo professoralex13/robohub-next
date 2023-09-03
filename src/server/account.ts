@@ -1,4 +1,5 @@
 import { PUBLIC_BUCKET_URL, env } from '@/common/environment';
+import { randomUUID } from 'crypto';
 import { privateProcedure, router } from './trpc';
 
 export const accountRouter = router({
@@ -46,7 +47,7 @@ export const accountRouter = router({
                 id: user.id,
             },
             data: {
-                image: `${PUBLIC_BUCKET_URL}/${key}`,
+                image: `${PUBLIC_BUCKET_URL}/${key}?=${randomUUID()}`,
             },
         });
 

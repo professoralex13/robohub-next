@@ -62,7 +62,7 @@ export const AccountSection = ({ user }: { user: User }) => {
             >
                 {/* Cannot use next/image because it needs a specified width and height which is unknown */}
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={`${user.image}?=${Math.random()}`} alt="profile" className="h-10 w-10 rounded-full" />
+                <img src={user.image} alt="profile" className="h-10 w-10 rounded-full" />
                 <m.div animate={{ rotateX: modalOpen ? 0 : 180 }} className="text-center">
                     <ChevronUp />
                 </m.div>
