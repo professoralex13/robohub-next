@@ -55,7 +55,7 @@ const TeamRoot = protectedServerPage<PropsWithChildren<TeamPageProps>>(async ({ 
     }
 
     if (membershipType === MembershipType.None) {
-        notFound();
+        throw new Error('You cannot view this page as you are not a member of this team');
     }
 
     return (

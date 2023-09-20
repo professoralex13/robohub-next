@@ -8,6 +8,11 @@ const nextConfig = {
         remotePatterns: [
             {
                 protocol: 'https',
+                hostname: 's3.griwilab.com',
+                port: '',
+            },
+            {
+                protocol: 'https',
                 hostname: 'lh3.googleusercontent.com',
                 port: '',
             },
